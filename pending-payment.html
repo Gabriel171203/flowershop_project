@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran Tertunda - Toko Bunga Indah</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .pending-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 2rem;
+            text-align: center;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pending-icon {
+            font-size: 5rem;
+            color: #FFA000;
+            margin-bottom: 1.5rem;
+        }
+        
+        .payment-steps {
+            background: #FFF8E1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            text-align: left;
+            border-left: 4px solid #FFC107;
+        }
+        
+        .payment-steps ol {
+            padding-left: 1.5rem;
+        }
+        
+        .payment-steps li {
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+        }
+        
+        .btn-primary {
+            display: inline-block;
+            background: #2196F3;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 1rem 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            display: inline-block;
+            background: white;
+            color: #2196F3;
+            border: 1px solid #2196F3;
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 1rem 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline:hover {
+            background: #E3F2FD;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>Toko Bunga Indah</h1>
+            </div>
+            <nav class="nav">
+                <a href="index.html">Beranda</a>
+                <a href="products.html">Produk</a>
+                <a href="#contact">Kontak</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="pending-container">
+            <div class="pending-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <h1>Menunggu Pembayaran</h1>
+            <p>Kami menunggu konfirmasi pembayaran Anda.</p>
+            
+            <div class="payment-steps">
+                <h3>Instruksi Pembayaran:</h3>
+                <ol>
+                    <li>Lakukan pembayaran sesuai dengan total yang tertera</li>
+                    <li>Simpan bukti pembayaran Anda</li>
+                    <li>Pembayaran akan diverifikasi dalam 1x24 jam</li>
+                    <li>Anda akan menerima notifikasi melalui email/SMS setelah pembayaran dikonfirmasi</li>
+                </ol>
+            </div>
+            
+            <div class="order-summary">
+                <h3>Ringkasan Pesanan</h3>
+                <p><strong>Nomor Pesanan:</strong> <span id="orderId"></span></p>
+                <p><strong>Status:</strong> <span class="status-badge" style="background: #FFC107; color: #000; padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.9rem;">Menunggu Pembayaran</span></p>
+                <p>Jika Anda sudah melakukan pembayaran, silakan unggah bukti pembayaran Anda.</p>
+            </div>
+            
+            <div style="margin: 2rem 0;">
+                <a href="#" class="btn-primary" id="uploadProof">
+                    <i class="fas fa-upload"></i> Unggah Bukti Pembayaran
+                </a>
+                <a href="products.html" class="btn-outline">
+                    <i class="fas fa-shopping-cart"></i> Lanjutkan Belanja
+                </a>
+            </div>
+            
+            <div class="contact-support" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #eee;">
+                <p>Butuh bantuan? <a href="https://wa.me/6281234567890" style="color: #2196F3; text-decoration: none;">
+                    <i class="fab fa-whatsapp"></i> Hubungi Kami
+                </a></p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <h3>Toko Bunga Indah</h3>
+                    <p>Menyediakan rangkaian bunga terbaik untuk semua momen spesial dalam hidup Anda.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Tautan Cepat</h4>
+                    <ul>
+                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="products.html">Produk</a></li>
+                        <li><a href="#about">Tentang Kami</a></li>
+                        <li><a href="#contact">Kontak</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Hubungi Kami</h4>
+                    <p><i class="fas fa-phone"></i> +62 812-3456-7890</p>
+                    <p><i class="fas fa-envelope"></i> info@tokobungaindah.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Jl. Contoh No. 123, Kota Anda</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Toko Bunga Indah. Semua hak dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Get order ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('order_id');
+        
+        // Display order ID
+        if (orderId) {
+            document.getElementById('orderId').textContent = orderId;
+        }
+        
+        // Handle upload proof button click
+        document.getElementById('uploadProof').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Fitur unggah bukti pembayaran akan segera tersedia. Silakan hubungi kami melalui WhatsApp untuk mengirim bukti pembayaran.');
+        });
+    </script>
+</body>
+</html>

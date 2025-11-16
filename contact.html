@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hubungi FlowerShop Indah untuk pemesanan bunga dan informasi lebih lanjut">
+    <title>Kontak Kami - FlowerShop Indah</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+</head>
+<body>
+    <!-- Skip to main content for better accessibility -->
+    <a href="#main-content" class="skip-link">Langsung ke konten utama</a>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>🌸 FlowerShop Indah</h1>
+                <button class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <span class="hamburger"></span>
+                </button>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="products.html">Produk</a></li>
+                        <li><a href="about.html">Tentang Kami</a></li>
+                        <li><a href="contact.html" class="active" aria-current="page">Kontak</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="page-header">
+            <div class="container">
+                <h1 data-aos="fade-up">Hubungi Kami</h1>
+                <p data-aos="fade-up" data-aos-delay="100">Kami siap membantu Anda dengan segala pertanyaan dan kebutuhan bunga Anda</p>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <div class="container">
+                <div class="contact-container">                    
+                    <div class="contact-form" data-aos="fade-left">
+                        <h2 class="form-title">Kirim Pesan</h2>
+                        <p class="form-subtitle">Isi formulir di bawah ini dan kami akan segera menghubungi Anda</p>
+                        
+                        <form class="contact-form-container">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" id="name" required>
+                                    <label for="name">Nama Lengkap</label>
+                                    <span class="input-icon"><i class="far fa-user"></i></span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="email" id="email" required>
+                                    <label for="email">Alamat Email</label>
+                                    <span class="input-icon"><i class="far fa-envelope"></i></span>
+                                </div>
+                            </div>
+                            
+                            <!-- Nomor Telepon -->
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="tel" id="phone">
+                                    <label for="phone">Nomor Telepon (Opsional)</label>
+                                    <span class="input-icon"><i class="fas fa-phone-alt"></i></span>
+                                </div>
+                            </div>
+
+                            <!-- Subjek Pesan -->
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <select id="subject" required>
+                                        <option value="" disabled selected></option>
+                                        <option value="order">Pertanyaan Pemesanan</option>
+                                        <option value="product">Informasi Produk</option>
+                                        <option value="custom">Pesanan Kustom</option>
+                                        <option value="other">Lainnya</option>
+                                    </select>
+                                    <label for="subject">Subjek Pesan</label>
+                                    <span class="input-icon"><i class="far fa-comment-dots"></i></span>
+                                </div>
+                            </div>
+                                                        
+                            <div class="form-group full-width">
+                                <div class="input-group">
+                                    <textarea id="message" rows="5" required></textarea>
+                                    <label for="message">Pesan Anda</label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <button type="submit" class="btn-submit">
+                                    <span>Kirim Pesan</span>
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="map-container" data-aos="fade-up">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322498!2d106.81915951476916!3d-6.194741995493231!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5390917b759%3A0x9dbf0a1c545f5bf7!2sJakarta%20Selatan%2C%20Kota%20Jakarta%20Selatan%2C%20Daerah%20Khusus%20Ibukota%20Jakarta!5e0!3m2!1sid!2sid!4v1621234567890!5m2!1sid!2sid" 
+                        width="100%" 
+                        height="450" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <h3>FlowerShop Indah</h3>
+                <p>Menyediakan rangkaian bunga terbaik untuk semua momen spesial dalam hidup Anda. Kami berkomitmen memberikan kualitas terbaik dengan sentuhan personal yang istimewa.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Tautan Cepat</h4>
+                <ul>
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="products.html">Produk</a></li>
+                    <li><a href="about.html">Tentang Kami</a></li>
+                    <li><a href="contact.html">Kontak</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Galeri</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-contact">
+                <h4>Hubungi Kami</h4>
+                <p><i class="fas fa-phone-alt"></i> +62 123 4567 890</p>
+                <p><i class="fas fa-envelope"></i> info@flowershopindah.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Jl. Bunga Indah No. 123, Jakarta</p>
+                <p><i class="far fa-clock"></i> Buka Setiap Hari: 08.00 - 21.00 WIB</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 FlowerShop Indah. Semua hak dilindungi.</p>
+            <div class="footer-legal">
+                <a href="#">Kebijakan Privasi</a>
+                <span>|</span>
+                <a href="#">Syarat & Ketentuan</a>
+                <span>|</span>
+                <a href="#">Kebijakan Pengembalian</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <script>
+        // Mobile menu toggle functionality
+        const menuToggle = document.querySelector('.menu-toggle');
+        const mainNav = document.querySelector('.main-nav');
+        
+        menuToggle.addEventListener('click', () => {
+            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true' || false;
+            menuToggle.setAttribute('aria-expanded', !isExpanded);
+            mainNav.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking on a nav link
+        document.querySelectorAll('.main-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.setAttribute('aria-expanded', 'false');
+                mainNav.classList.remove('active');
+            });
+        });
+
+        // Handle input focus/blur for icons
+        function setupInputIcon(input) {
+            const icon = input.closest('.input-group').querySelector('.input-icon');
+            if (!icon) return;
+            
+            const toggleIcon = (event) => {
+                // Skip jika event focus/blur berasal dari elemen dalam group yang sama
+                if (event && event.relatedTarget && 
+                    input.parentNode.contains(event.relatedTarget)) {
+                    return;
+                }
+                
+                const isFocused = document.activeElement === input;
+                let hasValue = false;
+                
+                if (input.tagName === 'SELECT') {
+                    hasValue = input.selectedIndex > 0;
+                } else {
+                    hasValue = input.value.trim() !== '';
+                }
+                
+                if (hasValue || isFocused) {
+                    icon.style.opacity = '0';
+                    icon.style.transform = 'translateX(-10px)';
+                } else {
+                    icon.style.opacity = '1';
+                    icon.style.transform = 'translateX(0)';
+                }
+            };
+
+            // Hapus event listener lama
+            const newToggleIcon = toggleIcon.bind(input);
+            
+            // Tambahkan event listener baru
+            input.addEventListener('input', newToggleIcon);
+            input.addEventListener('focus', newToggleIcon);
+            input.addEventListener('blur', newToggleIcon);
+            input.addEventListener('change', newToggleIcon);
+            
+            // Inisialisasi status awal
+            newToggleIcon();
+        }
+
+        // Handle subject select specifically
+        const subjectSelect = document.getElementById('subject');
+        const subjectIcon = subjectSelect?.closest('.input-group')?.querySelector('.input-icon');
+        
+        if (subjectSelect && subjectIcon) {
+            const handleSubjectChange = () => {
+                if (subjectSelect.value !== '' || document.activeElement === subjectSelect) {
+                    subjectIcon.style.opacity = '0';
+                    subjectIcon.style.transform = 'translateX(-10px)';
+                } else {
+                    subjectIcon.style.opacity = '1';
+                    subjectIcon.style.transform = 'translateX(0)';
+                }
+            };
+            
+            subjectSelect.addEventListener('change', handleSubjectChange);
+            subjectSelect.addEventListener('focus', handleSubjectChange);
+            subjectSelect.addEventListener('blur', handleSubjectChange);
+            handleSubjectChange(); // Initial check
+        }
+        
+        // Setup for all inputs and textareas
+        document.querySelectorAll('.input-group input, .input-group textarea').forEach(setupInputIcon);
+    </script>
+</body>
+</html>

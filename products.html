@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="id" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Temukan koleksi bunga terbaik kami - Buket bunga, rangkaian bunga, dan hadiah spesial untuk semua momen berharga">
+    <title>Produk Bunga - FlowerShop Indah</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+    <style>
+        /* Product Page Specific Styles */
+        .page-header {
+            background: linear-gradient(135deg, #ffd3b6, #ffaaa5);
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,117.3C96,139,192,181,288,181.3C384,181,480,139,576,138.7C672,139,768,181,864,181.3C960,181,1056,139,1152,117.3C1248,96,1344,96,1392,96L1440,96L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>') bottom/cover no-repeat;
+            opacity: 0.1;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            animation: fadeInDown 1s ease;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            position: relative;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .products-section {
+            padding: 4rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid var(--primary-color);
+            background: transparent;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            position: relative;
+            padding-top: 100%;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-badges {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 2;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.best-seller {
+            background: #f8c291;
+            color: #2d3436;
+        }
+
+        .badge.new {
+            background: #a8e6cf;
+            color: #2d3436;
+        }
+
+        .product-actions {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            opacity: 0;
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .quick-view, .add-to-cart {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quick-view {
+            background: white;
+            color: var(--text-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .add-to-cart {
+            background: var(--primary-color);
+            color: white;
+            flex: 1;
+        }
+
+        .quick-view:hover, .add-to-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-info h3 {
+            margin: 0 0 0.5rem;
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+
+        .product-price {
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .discount {
+            background: #ffd3b6;
+            color: #d63031;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .product-rating {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .stars {
+            color: #ffd700;
+            letter-spacing: 2px;
+        }
+
+        .review-count {
+            font-size: 0.8rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 3rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background: white;
+            color: var(--text-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .page-numbers {
+            display: flex;
+            gap: 0.5rem;
+            margin: 0 1rem;
+        }
+
+        .page-number {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+            background: white;
+            color: var(--text-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .page-number:hover, .page-number.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .ellipsis {
+            display: flex;
+            align-items: center;
+            padding: 0 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .page-subtitle {
+                font-size: 1rem;
+            }
+            
+            .filters {
+                gap: 0.5rem;
+            }
+            
+            .filter-btn {
+                padding: 0.4rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header {
+                padding: 3rem 1rem;
+            }
+            
+            .page-title {
+                font-size: 1.75rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pagination {
+                gap: 0.5rem;
+            }
+            
+            .page-number {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to main content for better accessibility -->
+    <a href="#main-content" class="skip-link">Langsung ke konten utama</a>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>🌸 FlowerShop Indah</h1>
+                <button class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <span class="hamburger"></span>
+                </button>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="index.html">Beranda</a></li>
+                        <li><a href="products.html" class="active" aria-current="page">Produk</a></li>
+                        <li><a href="about.html">Tentang Kami</a></li>
+                        <li><a href="contact.html">Kontak</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="page-header">
+            <div class="container">
+                <h1 class="page-title">Koleksi Bunga Kami</h1>
+                <p class="page-subtitle">Temukan rangkaian bunga terbaik untuk setiap momen spesial</p>
+                
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">Semua Produk</button>
+                    <button class="filter-btn" data-filter="buket">Buket Bunga</button>
+                    <button class="filter-btn" data-filter="single">Bunga Single</button>
+                    <button class="filter-btn" data-filter="papan">Bunga Papan</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="products-section">
+            <div class="container">
+                <div class="products-grid">
+                    <!-- Bunga Single 1 -->
+                    <article class="product-card" data-category="single">
+                        <div class="product-image">
+                            <img src="bungasingle.jpg" alt="Bunga Kawat Single" loading="lazy">
+                            <div class="product-badges">
+                                <span class="badge best-seller">Terlaris</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3>Bunga Kawat Single</h3>
+                            <div class="product-price">
+                                <span class="price">Rp 12.000</span>
+                                <span class="original-price">Rp 15.000</span>
+                                <span class="discount">20%</span>
+                            </div>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="review-count">(128 ulasan)</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Bunga Single 2 -->
+                    <article class="product-card" data-category="single">
+                        <div class="product-image">
+                            <img src="bungasingle2.jpg" alt="Bunga Kawat Single Varian" loading="lazy">
+                            <div class="product-badges">
+                                <span class="badge new">Baru</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3>Bunga Kawat Single Varian</h3>
+                            <div class="product-price">
+                                <span class="price">Rp 12.000</span>
+                            </div>
+                            <div class="product-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span class="review-count">(64 ulasan)</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Buket Bunga 1 -->
+                    <article class="product-card" data-category="buket">
+                        <div class="product-image">
+                            <img src="buket.jpg" alt="Buket Bunga Mewah" loading="lazy">
+                            <div class="product-actions">
+                                <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3>Buket Bunga Mewah</h3>
+                            <div class="product-price">
+                                <span class="price">Rp 38.000</span>
+                            </div>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="review-count">(89 ulasan)</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Buket Bunga 2 -->
+                    <article class="product-card" data-category="buket">
+                        <div class="product-image">
+                            <img src="buket2.jpg" alt="Buket Bunga Cantik" loading="lazy">
+                            <div class="product-actions">
+                                <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3>Buket Bunga Cantik</h3>
+                            <div class="product-price">
+                                <span class="price">Rp 38.000</span>
+                            </div>
+                            <div class="product-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span class="review-count">(72 ulasan)</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Buket Bunga 3 -->
+                    <article class="product-card" data-category="buket">
+                        <div class="product-image">
+                            <img src="buket3.jpg" alt="Buket Bunga Elegan" loading="lazy">
+                            <div class="product-badges">
+                                <span class="badge best-seller">Terlaris</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3>Buket Bunga Elegan</h3>
+                            <div class="product-price">
+                                <span class="price">Rp 38.000</span>
+                            </div>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="review-count">(156 ulasan)</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Buket Bunga 4 -->
+                    <article class="product-card" data-category="buket">
+                        <div class="product-image">
+                            <img src="buket4.jpg" alt="Buket Bunga Mawar" loading="lazy">
+                            <div class="product-actions">
+                                <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3>Buket Bunga Mawar</h3>
+                            <div class="product-price">
+                                <span class="price">Rp 38.000</span>
+                            </div>
+                            <div class="product-rating">
+                                <span class="stars">★★★★☆</span>
+                                <span class="review-count">(93 ulasan)</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Buket Bunga 5 -->
+                    <article class="product-card" data-category="buket">
+                        <div class="product-image">
+                            <img src="buket5.jpg" alt="Buket Bunga Segar" loading="lazy">
+                            <div class="product-badges">
+                                <span class="badge new">Baru</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3>Buket Bunga Segar</h3>
+                            <div class="product-price">
+                                <span class="price">Rp 38.000</span>
+                            </div>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="review-count">(47 ulasan)</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Pesan Buket Custom -->
+                    <article class="product-card" data-category="custom">
+                        <div class="product-image">
+                            <img src="https://via.placeholder.com/300x300?text=Custom+Bouquet" alt="Pesan Buket Custom" loading="lazy">
+                            <div class="product-badges">
+                                <span class="badge new">Custom Order</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn-chat-admin" onclick="return chatAdminCustom(event)">
+                                    <i class="fab fa-whatsapp"></i> Chat Admin
+                                </button>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3>Pesan Buket Custom</h3>
+                            <div class="product-price">
+                                <span class="price">Hubungi Whatsapp Kami</span>
+                            </div>
+                            <div class="product-rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="review-count">(89 ulasan)</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="pagination">
+                    <button class="pagination-btn" disabled><i>←</i> Sebelumnya</button>
+                    <div class="page-numbers">
+                        <button class="page-number active">1</button>
+                        <button class="page-number">2</button>
+                        <button class="page-number">3</button>
+                        <span class="ellipsis">...</span>
+                        <button class="page-number">5</button>
+                    </div>
+                    <button class="pagination-btn">Selanjutnya <i>→</i></button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <h3>FlowerShop Indah</h3>
+                <p>Menyediakan rangkaian bunga terbaik untuk semua momen spesial dalam hidup Anda. Kami berkomitmen memberikan kualitas terbaik dengan sentuhan personal yang istimewa.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Tautan Cepat</h4>
+                <ul>
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="products.html">Produk</a></li>
+                    <li><a href="about.html">Tentang Kami</a></li>
+                    <li><a href="contact.html">Kontak</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Galeri</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-contact">
+                <h4>Hubungi Kami</h4>
+                <p><i class="fas fa-phone-alt"></i> +62 123 4567 890</p>
+                <p><i class="fas fa-envelope"></i> info@flowershopindah.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Jl. Bunga Indah No. 123, Jakarta</p>
+                <p><i class="far fa-clock"></i> Buka Setiap Hari: 08.00 - 21.00 WIB</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 FlowerShop Indah. Semua hak dilindungi.</p>
+            <div class="footer-legal">
+                <a href="#">Kebijakan Privasi</a>
+                <span>|</span>
+                <a href="#">Syarat & Ketentuan</a>
+                <span>|</span>
+                <a href="#">Kebijakan Pengembalian</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tambahkan script payment.js -->
+    <script src="payment.js"></script>
+    <!-- Tambahkan script.js -->
+    <script src="script.js"></script>
+    
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const mainNav = document.querySelector('.main-nav');
+        
+        menuToggle.addEventListener('click', () => {
+            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+            menuToggle.setAttribute('aria-expanded', !isExpanded);
+            mainNav.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        });
+
+        // Product filtering
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const productCards = document.querySelectorAll('.product-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                const filterValue = button.getAttribute('data-filter');
+                
+                productCards.forEach(card => {
+                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                        card.style.display = 'block';
+                        // Add animation class when showing cards
+                        card.style.animation = 'fadeIn 0.5s ease forwards';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Add to cart functionality
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const productCard = button.closest('.product-card');
+                const productName = productCard.querySelector('h3').textContent;
+                const productPrice = productCard.querySelector('.price').textContent;
+                
+                // Here you would typically add the product to a shopping cart
+                console.log(`Added to cart: ${productName} - ${productPrice}`);
+                
+                // Show added to cart feedback
+                const originalText = button.textContent;
+                const originalBg = button.style.backgroundColor;
+                button.textContent = 'Ditambahkan!';
+                button.style.backgroundColor = '#4CAF50';
+                button.style.width = button.offsetWidth + 'px';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.backgroundColor = originalBg;
+                    button.style.width = '';
+                }, 2000);
+            });
+        });
+
+        // Quick view functionality
+        const quickViewButtons = document.querySelectorAll('.quick-view');
+        
+        quickViewButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const productCard = button.closest('.product-card');
+                const productName = productCard.querySelector('h3').textContent;
+                const productPrice = productCard.querySelector('.price').textContent;
+                
+                // Here you would typically show a modal with more product details
+                alert(`Quick View: ${productName}\nHarga: ${productPrice}\n\nFitur ini akan menampilkan detail produk yang lebih lengkap.`);
+            });
+        });
+
+        // Pagination
+        const pageNumbers = document.querySelectorAll('.page-number');
+        const paginationPrev = document.querySelector('.pagination-btn:first-child');
+        const paginationNext = document.querySelector('.pagination-btn:last-child');
+        
+        pageNumbers.forEach(number => {
+            number.addEventListener('click', (e) => {
+                e.preventDefault();
+                pageNumbers.forEach(n => n.classList.remove('active'));
+                number.classList.add('active');
+                
+                // Update pagination buttons state
+                const currentPage = parseInt(number.textContent);
+                paginationPrev.disabled = currentPage === 1;
+                paginationNext.disabled = currentPage === 5; // Assuming 5 is the last page
+                
+                // Here you would typically load the corresponding page of products
+                console.log(`Loading page ${currentPage}...`);
+            });
+        });
+
+        // Previous/Next pagination
+        paginationPrev.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (paginationPrev.disabled) return;
+            
+            const activePage = document.querySelector('.page-number.active');
+            const prevPage = activePage.previousElementSibling;
+            
+            if (prevPage && prevPage.classList.contains('page-number')) {
+                prevPage.click();
+            }
+        });
+        
+        paginationNext.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (paginationNext.disabled) return;
+            
+            const activePage = document.querySelector('.page-number.active');
+            const nextPage = activePage.nextElementSibling;
+            
+            if (nextPage && nextPage.classList.contains('page-number')) {
+                nextPage.click();
+            } else if (nextPage?.nextElementSibling?.classList.contains('page-number')) {
+                nextPage.nextElementSibling.click();
+            }
+        });
+
+        // Add animation on scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.product-card, .page-title, .page-subtitle');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial state for animations
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            });
+            
+            // Run once on page load
+            animateOnScroll();
+            
+            // Set initial pagination state
+            paginationPrev.disabled = true;
+        });
+        
+        // Run on scroll
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+</html>
