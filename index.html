@@ -216,34 +216,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <script>
-        // Mobile menu toggle
-        const menuToggle = document.querySelector('.menu-toggle');
-        const mainNav = document.querySelector('.main-nav');
-        
-        menuToggle.addEventListener('click', () => {
-            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-            menuToggle.setAttribute('aria-expanded', !isExpanded);
-            mainNav.classList.toggle('active');
-            menuToggle.classList.toggle('active');
-        });
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 100,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
         // Add animation on scroll
         const animateOnScroll = () => {
             const elements = document.querySelectorAll('.card, .feature, .section-title, .section-subtitle');
@@ -258,7 +230,19 @@
         };
 
         // Run once on page load
-        document.addEventListener('DOMContentLoaded', animateOnScroll);
+        document.addEventListener('DOMContentLoaded', () => {
+            animateOnScroll();
+            
+            // Initialize mobile menu
+            const menuToggle = document.querySelector('.menu-toggle');
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    document.querySelector('.main-nav')?.classList.toggle('active');
+                    document.body.classList.toggle('no-scroll');
+                });
+            }
+        });
         
         // Run on scroll
         window.addEventListener('scroll', animateOnScroll);

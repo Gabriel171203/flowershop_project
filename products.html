@@ -10,6 +10,43 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
     <style>
+        /* Loading Overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            backdrop-filter: blur(3px);
+        }
+
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #ff6b6b;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Product Page Specific Styles */
         .page-header {
             background: linear-gradient(135deg, #ffd3b6, #ffaaa5);
@@ -154,39 +191,24 @@
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 1rem;
             display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-            opacity: 0;
+            flex-direction: column;
+            gap: 8px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.9);
             transform: translateY(100%);
-            transition: var(--transition);
-        }
-
-        .product-card:hover .product-actions {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .quick-view, .add-to-cart {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
+            transition: all 0.3s ease;
             justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            width: 100%;
+            box-sizing: border-box;
         }
-
-        .quick-view {
-            background: white;
-            color: var(--text-color);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        
+        .product-card:hover .product-actions {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
         }
 
         .add-to-cart {
@@ -195,6 +217,30 @@
             flex: 1;
         }
 
+        .quick-view, .buy-now {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .quick-view {
+            background: #f8f9fa;
+            color: #333;
+        }
+        
+        .buy-now {
+            background: #ff6b6b;
+            color: white;
+            font-weight: 500;
+        }
+        
         .quick-view:hover, .add-to-cart:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -422,6 +468,7 @@
                             </div>
                             <div class="product-actions">
                                 <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                                <button class="buy-now" data-product-id="prod-d26v6tk0x" data-product-name="Bunga Kawat Single" data-product-price="12000" aria-label="Beli sekarang">💳 Beli Sekarang</button>
                             </div>
                         </div>
                         <div class="product-info">
@@ -447,6 +494,7 @@
                             </div>
                             <div class="product-actions">
                                 <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                                <button class="buy-now" data-product-id="prod-d26v6tk0x" data-product-name="Bunga Kawat Single" data-product-price="12000" aria-label="Beli sekarang">💳 Beli Sekarang</button>
                             </div>
                         </div>
                         <div class="product-info">
@@ -467,6 +515,7 @@
                             <img src="buket.jpg" alt="Buket Bunga Mewah" loading="lazy">
                             <div class="product-actions">
                                 <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                                <button class="buy-now" data-product-id="prod-d26v6tk0x" data-product-name="Bunga Kawat Single" data-product-price="12000" aria-label="Beli sekarang">💳 Beli Sekarang</button>
                             </div>
                         </div>
                         <div class="product-info">
@@ -487,6 +536,7 @@
                             <img src="buket2.jpg" alt="Buket Bunga Cantik" loading="lazy">
                             <div class="product-actions">
                                 <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                                <button class="buy-now" data-product-id="prod-d26v6tk0x" data-product-name="Bunga Kawat Single" data-product-price="12000" aria-label="Beli sekarang">💳 Beli Sekarang</button>
                             </div>
                         </div>
                         <div class="product-info">
@@ -510,6 +560,7 @@
                             </div>
                             <div class="product-actions">
                                 <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                                <button class="buy-now" data-product-id="prod-d26v6tk0x" data-product-name="Bunga Kawat Single" data-product-price="12000" aria-label="Beli sekarang">💳 Beli Sekarang</button>
                             </div>
                         </div>
                         <div class="product-info">
@@ -530,6 +581,7 @@
                             <img src="buket4.jpg" alt="Buket Bunga Mawar" loading="lazy">
                             <div class="product-actions">
                                 <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                                <button class="buy-now" data-product-id="prod-d26v6tk0x" data-product-name="Bunga Kawat Single" data-product-price="12000" aria-label="Beli sekarang">💳 Beli Sekarang</button>
                             </div>
                         </div>
                         <div class="product-info">
@@ -553,6 +605,7 @@
                             </div>
                             <div class="product-actions">
                                 <button class="quick-view" aria-label="Lihat detail">👁️</button>
+                                <button class="buy-now" data-product-id="prod-d26v6tk0x" data-product-name="Bunga Kawat Single" data-product-price="12000" aria-label="Beli sekarang">💳 Beli Sekarang</button>
                             </div>
                         </div>
                         <div class="product-info">
@@ -570,7 +623,7 @@
                     <!-- Pesan Buket Custom -->
                     <article class="product-card" data-category="custom">
                         <div class="product-image">
-                            <img src="https://via.placeholder.com/300x300?text=Custom+Bouquet" alt="Pesan Buket Custom" loading="lazy">
+                            <img src="https://placehold.co/300x300/ffffff/e5e5e5.png?text=Custom+Bouquet" alt="Pesan Buket Custom" loading="lazy">
                             <div class="product-badges">
                                 <span class="badge new">Custom Order</span>
                             </div>
@@ -603,10 +656,99 @@
                         <button class="page-number">5</button>
                     </div>
                     <button class="pagination-btn">Selanjutnya <i>→</i></button>
-                </div>
             </div>
         </section>
-    </main>
+
+        <!-- Customer Data Form -->
+        <section class="customer-form-section" style="padding: 4rem 0; background-color: #f9f9f9; margin-top: 3rem;">
+            <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+                <div class="section-header" style="text-align: center; margin-bottom: 2.5rem;">
+                    <h2 style="color: #333; font-size: 2rem; margin-bottom: 0.5rem;">Data Pembeli</h2>
+                    <p style="color: #666; font-size: 1.1rem;">Silakan isi data diri Anda untuk melanjutkan pembayaran</p>
+                </div>
+                
+                <form id="customer-data-form" class="customer-form" style="max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
+                    <div class="form-row" style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div class="form-group" style="flex: 1; min-width: 250px; margin-bottom: 1rem;">
+                            <label for="customer-name" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #444;">
+                                Nama Lengkap <span style="color: #e74c3c;">*</span>
+                            </label>
+                            <input type="text" id="customer-name" name="customer-name" 
+                                   style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;"
+                                   required placeholder="Masukkan nama lengkap" minlength="3" maxlength="100">
+                            <div style="font-size: 0.85rem; color: #666; margin-top: 0.5rem; font-style: italic;">Contoh: Budi Santoso</div>
+                        </div>
+                        
+                        <div class="form-group" style="flex: 1; min-width: 250px; margin-bottom: 1rem;">
+                            <label for="customer-email" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #444;">
+                                Email <span style="color: #e74c3c;">*</span>
+                            </label>
+                            <input type="email" id="customer-email" name="customer-email" 
+                                   style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;"
+                                   required placeholder="contoh: email@domain.com" 
+                                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                   title="Masukkan alamat email yang valid, contoh: nama@domain.com">
+                            <div style="font-size: 0.85rem; color: #666; margin-top: 0.5rem; font-style: italic;">
+                                Kami akan mengirim konfirmasi ke email ini
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row" style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div class="form-group" style="flex: 1; min-width: 250px; margin-bottom: 1rem;">
+                            <label for="customer-phone" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #444;">
+                                Nomor Telepon <span style="color: #e74c3c;">*</span>
+                            </label>
+                            <div style="display: flex;">
+                                <span style="background-color: #f5f5f5; border: 1px solid #ddd; border-right: none; border-radius: 6px 0 0 6px; padding: 0 1rem; display: flex; align-items: center; font-size: 0.9rem; color: #555;">+62</span>
+                                <input type="tel" id="customer-phone" name="customer-phone" 
+                                       style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 0 6px 6px 0; font-size: 1rem;"
+                                       required placeholder="81234567890" pattern="[0-9]{9,15}" minlength="9" maxlength="15">
+                            </div>
+                            <div style="font-size: 0.85rem; color: #666; margin-top: 0.5rem; font-style: italic;">
+                                Contoh: 81234567890 (tanpa +62)
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="flex: 1; min-width: 250px; margin-bottom: 1rem;">
+                            <label for="customer-address" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #444;">
+                                Alamat Pengiriman
+                            </label>
+                            <textarea id="customer-address" name="customer-address" 
+                                     style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; min-height: 100px; resize: vertical;"
+                                     placeholder="Masukkan alamat lengkap pengiriman" rows="2"></textarea>
+                            <div style="font-size: 0.85rem; color: #666; margin-top: 0.5rem; font-style: italic;">
+                                Opsional, jika berbeda dengan alamat profil
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; margin: 1.5rem 0;">
+                        <input type="checkbox" id="save-info" name="save-info" checked style="margin-right: 0.75rem; width: 18px; height: 18px;">
+                        <label for="save-info" style="color: #555; font-size: 0.95rem;">
+                            Simpan informasi untuk transaksi selanjutnya
+                        </label>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #eee;">
+                        <button type="button" id="reset-form" 
+                                style="padding: 0.75rem 1.5rem; border: 1px solid #ddd; border-radius: 6px; background-color: #f5f5f5; color: #555; font-weight: 500; cursor: pointer; transition: all 0.3s ease; font-size: 1rem;">
+                            Reset Form
+                        </button>
+                        <button type="submit" id="save-customer-data" 
+                                style="padding: 0.75rem 1.5rem; border: none; border-radius: 6px; background-color: #ff6b6b; color: white; font-weight: 500; cursor: pointer; transition: all 0.3s ease; font-size: 1rem;">
+                            Simpan Data
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Memproses pembayaran...</div>
+    </div>
 
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -657,171 +799,10 @@
         </div>
     </footer>
 
-    <!-- Tambahkan script payment.js -->
-    <script src="payment.js"></script>
-    <!-- Tambahkan script.js -->
-    <script src="script.js"></script>
-    
-    <script>
-        // Mobile menu toggle
-        const menuToggle = document.querySelector('.menu-toggle');
-        const mainNav = document.querySelector('.main-nav');
-        
-        menuToggle.addEventListener('click', () => {
-            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-            menuToggle.setAttribute('aria-expanded', !isExpanded);
-            mainNav.classList.toggle('active');
-            menuToggle.classList.toggle('active');
-        });
-
-        // Product filtering
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const productCards = document.querySelectorAll('.product-card');
-
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all buttons
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                // Add active class to clicked button
-                button.classList.add('active');
-                
-                const filterValue = button.getAttribute('data-filter');
-                
-                productCards.forEach(card => {
-                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
-                        card.style.display = 'block';
-                        // Add animation class when showing cards
-                        card.style.animation = 'fadeIn 0.5s ease forwards';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-        // Add to cart functionality
-        const addToCartButtons = document.querySelectorAll('.add-to-cart');
-        
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                const productCard = button.closest('.product-card');
-                const productName = productCard.querySelector('h3').textContent;
-                const productPrice = productCard.querySelector('.price').textContent;
-                
-                // Here you would typically add the product to a shopping cart
-                console.log(`Added to cart: ${productName} - ${productPrice}`);
-                
-                // Show added to cart feedback
-                const originalText = button.textContent;
-                const originalBg = button.style.backgroundColor;
-                button.textContent = 'Ditambahkan!';
-                button.style.backgroundColor = '#4CAF50';
-                button.style.width = button.offsetWidth + 'px';
-                
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.backgroundColor = originalBg;
-                    button.style.width = '';
-                }, 2000);
-            });
-        });
-
-        // Quick view functionality
-        const quickViewButtons = document.querySelectorAll('.quick-view');
-        
-        quickViewButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                const productCard = button.closest('.product-card');
-                const productName = productCard.querySelector('h3').textContent;
-                const productPrice = productCard.querySelector('.price').textContent;
-                
-                // Here you would typically show a modal with more product details
-                alert(`Quick View: ${productName}\nHarga: ${productPrice}\n\nFitur ini akan menampilkan detail produk yang lebih lengkap.`);
-            });
-        });
-
-        // Pagination
-        const pageNumbers = document.querySelectorAll('.page-number');
-        const paginationPrev = document.querySelector('.pagination-btn:first-child');
-        const paginationNext = document.querySelector('.pagination-btn:last-child');
-        
-        pageNumbers.forEach(number => {
-            number.addEventListener('click', (e) => {
-                e.preventDefault();
-                pageNumbers.forEach(n => n.classList.remove('active'));
-                number.classList.add('active');
-                
-                // Update pagination buttons state
-                const currentPage = parseInt(number.textContent);
-                paginationPrev.disabled = currentPage === 1;
-                paginationNext.disabled = currentPage === 5; // Assuming 5 is the last page
-                
-                // Here you would typically load the corresponding page of products
-                console.log(`Loading page ${currentPage}...`);
-            });
-        });
-
-        // Previous/Next pagination
-        paginationPrev.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (paginationPrev.disabled) return;
-            
-            const activePage = document.querySelector('.page-number.active');
-            const prevPage = activePage.previousElementSibling;
-            
-            if (prevPage && prevPage.classList.contains('page-number')) {
-                prevPage.click();
-            }
-        });
-        
-        paginationNext.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (paginationNext.disabled) return;
-            
-            const activePage = document.querySelector('.page-number.active');
-            const nextPage = activePage.nextElementSibling;
-            
-            if (nextPage && nextPage.classList.contains('page-number')) {
-                nextPage.click();
-            } else if (nextPage?.nextElementSibling?.classList.contains('page-number')) {
-                nextPage.nextElementSibling.click();
-            }
-        });
-
-        // Add animation on scroll
-        const animateOnScroll = () => {
-            const elements = document.querySelectorAll('.product-card, .page-title, .page-subtitle');
-            elements.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
-                
-                if (elementTop < windowHeight - 100) {
-                    element.style.opacity = '1';
-                    element.style.transform = 'translateY(0)';
-                }
-            });
-        };
-
-        // Initialize animations
-        document.addEventListener('DOMContentLoaded', () => {
-            // Set initial state for animations
-            document.querySelectorAll('.product-card').forEach(card => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            });
-            
-            // Run once on page load
-            animateOnScroll();
-            
-            // Set initial pagination state
-            paginationPrev.disabled = true;
-        });
-        
-        // Run on scroll
-        window.addEventListener('scroll', animateOnScroll);
-    </script>
+    <!-- Scripts should be loaded in this order -->
+    <script src="js/script.js"></script>
+    <script src="js/products.js"></script>
+    <!-- Load payment.js as a module -->
+    <script type="module" src="js/payment.js"></script>
 </body>
 </html>
