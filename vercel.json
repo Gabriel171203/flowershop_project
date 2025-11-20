@@ -21,12 +21,5 @@
     { "src": "/thank-you", "dest": "/thank-you.html" },
     { "src": "/pending-payment", "dest": "/pending-payment.html" },
     { "src": "/(.*)", "dest": "/index.html" }
-  ],
-  "rewrites": [
-    { "source": "/products", "destination": "/products.html" },
-    { "source": "/about", "destination": "/about.html" },
-    { "source": "/contact", "destination": "/contact.html" },
-    { "source": "/thank-you", "destination": "/thank-you.html" },
-    { "source": "/pending-payment", "destination": "/pending-payment.html" }
   ]
 }
