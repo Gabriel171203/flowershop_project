@@ -1,70 +1,158 @@
+// Format rupiah
+function formatRupiah(amount) {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+    }).format(amount);
+}
+
+// Get cart items from localStorage
+function getCartItems() {
+    try {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        return cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: parseFloat(item.price),
+            quantity: parseInt(item.quantity) || 1,
+            category: item.category || 'Bunga'
+        }));
+    } catch (error) {
+        console.error('Error getting cart items:', error);
+        return [];
+    }
+}
+
+// Update order summary
+function updateOrderSummary() {
+    const cartItems = getCartItems();
+    const orderSummary = document.getElementById('order-summary');
+    const orderTotal = document.getElementById('order-total');
+    let total = 0;
+
+    // Clear existing items
+    orderSummary.innerHTML = '';
+
+    // Add each item to the summary
+    cartItems.forEach(item => {
+        const subtotal = item.price * item.quantity;
+        total += subtotal;
+
+        const itemElement = document.createElement('div');
+        itemElement.className = 'flex justify-between items-center py-2 border-b border-gray-100';
+        itemElement.innerHTML = `
+            <div>
+                <h4 class="font-medium">${item.name}</h4>
+                <p class="text-sm text-gray-600">${item.quantity} x ${formatRupiah(item.price)}</p>
+            </div>
+            <span class="font-medium">${formatRupiah(subtotal)}</span>
+        `;
+        orderSummary.appendChild(itemElement);
+    });
+
+    // Update total
+    if (orderTotal) {
+        orderTotal.textContent = formatRupiah(total);
+    }
+}
+
+// Add to cart function
+function addToCart(productId, productName, price, category = 'Bunga') {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    // Check if product already in cart
+    const existingItem = cart.find(item => item.id === productId);
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            id: productId,
+            name: productName,
+            price: price,
+            quantity: 1,
+            category: category
+        });
+    }
+    
+    // Save to localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // Update UI
+    updateOrderSummary();
+    
+    // Show success message
+    showAlert(`${productName} telah ditambahkan ke keranjang`);
+}
+
 // Handle order submission
 async function submitOrder(event) {
-  event.preventDefault();
-  
-  const form = event.target;
-  const submitBtn = form.querySelector('button[type="submit"]');
-  const originalBtnText = submitBtn.innerHTML;
-  
-  try {
-    // Show loading state
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = 'Memproses...';
+    event.preventDefault();
     
-    // Get form data
-    const formData = {
-      customer_name: form.querySelector('#customer-name').value.trim(),
-      customer_email: form.querySelector('#customer-email').value.trim(),
-      customer_phone: form.querySelector('#customer-phone').value.trim(),
-      items: []
-    };
+    const form = event.target;
+    const submitBtn = form.querySelector('#submit-order-btn');
+    const loadingSpinner = submitBtn.querySelector('#loading-spinner');
+    const submitText = submitBtn.querySelector('span');
     
-    // Get cart items (you'll need to implement this based on your cart system)
-    const cartItems = getCartItems(); // Implement this function to get cart items
-    formData.items = cartItems;
-    
-    // Validate form data
-    if (!formData.customer_name || !formData.customer_email || !formData.customer_phone) {
-      throw new Error('Harap isi semua field yang wajib diisi');
+    try {
+        // Show loading state
+        submitBtn.disabled = true;
+        loadingSpinner.classList.remove('hidden');
+        submitText.textContent = 'Memproses...';
+
+        // Get form data
+        const formData = {
+            customer_name: document.getElementById('customer-name').value.trim(),
+            customer_email: document.getElementById('customer-email').value.trim(),
+            customer_phone: document.getElementById('customer-phone').value.trim(),
+            items: getCartItems()
+        };
+
+        // Validate form data
+        if (!formData.customer_name || !formData.customer_email || !formData.customer_phone) {
+            throw new Error('Harap isi semua field yang wajib diisi');
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.customer_email)) {
+            throw new Error('Format email tidak valid');
+        }
+
+        if (formData.items.length === 0) {
+            throw new Error('Keranjang belanja Anda kosong');
+        }
+
+        // Submit order to backend
+        const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || 'Gagal memproses pesanan');
+        }
+
+        // Redirect to payment page
+        if (result.data?.payment_url) {
+            window.location.href = result.data.payment_url;
+        } else {
+            window.location.href = '/thank-you.html';
+        }
+
+    } catch (error) {
+        console.error('Order submission error:', error);
+        showAlert(error.message || 'Terjadi kesalahan saat memproses pesanan', 'error');
+    } finally {
+        // Reset loading state
+        submitBtn.disabled = false;
+        loadingSpinner.classList.add('hidden');
+        submitText.textContent = 'Lanjut ke Pembayaran';
     }
-    
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.customer_email)) {
-      throw new Error('Format email tidak valid');
-    }
-    
-    if (cartItems.length === 0) {
-      throw new Error('Keranjang belanja Anda kosong');
-    }
-    
-    // Submit order to backend
-    const response = await fetch('/api/orders', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData)
-    });
-    
-    const result = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(result.message || 'Gagal memproses pesanan');
-    }
-    
-    // Redirect to payment page
-    if (result.data && result.data.payment_url) {
-      window.location.href = result.data.payment_url;
-    } else {
-      window.location.href = '/thank-you.html';
-    }
-    
-  } catch (error) {
-    console.error('Order submission error:', error);
-    showAlert(error.message || 'Terjadi kesalahan saat memproses pesanan', 'error');
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = originalBtnText;
-  }
 }
 
 // Helper function to show alert messages
@@ -93,28 +181,50 @@ function initOrderForm() {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-  initOrderForm();
-  
-  // Initialize other components
-  const mobileMenuButton = document.getElementById('mobile-menu-button');
-  const mobileMenu = document.getElementById('mobile-menu');
-  
-  if (mobileMenuButton && mobileMenu) {
-    mobileMenuButton.addEventListener('click', function() {
-      const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
-      mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
-      mobileMenu.classList.toggle('hidden');
-    });
-  }
-  
-  // Close mobile menu when clicking outside
-  document.addEventListener('click', function(event) {
-    if (mobileMenu && !mobileMenu.contains(event.target) && 
-        mobileMenuButton && !mobileMenuButton.contains(event.target)) {
-      mobileMenu.classList.add('hidden');
-      mobileMenuButton.setAttribute('aria-expanded', 'false');
+    // Initialize order form
+    const orderForm = document.getElementById('customer-data-form');
+    if (orderForm) {
+        orderForm.addEventListener('submit', submitOrder);
     }
-  });
+    
+    // Initialize mobile menu
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function() {
+            const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+            mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (mobileMenu && !mobileMenu.contains(event.target) && 
+            mobileMenuButton && !mobileMenuButton.contains(event.target)) {
+            mobileMenu.classList.add('hidden');
+            mobileMenuButton.setAttribute('aria-expanded', 'false');
+        }
+    });
+    
+    // Initialize add to cart buttons
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const card = button.closest('.product-card');
+            const productId = card.dataset.id || Date.now().toString();
+            const productName = card.querySelector('.product-title')?.textContent || 'Produk';
+            const price = parseFloat(card.dataset.price) || 0;
+            const category = card.dataset.category || 'Bunga';
+            
+            addToCart(productId, productName, price, category);
+        });
+    });
+    
+    // Initialize order summary
+    updateOrderSummary();
 });
 
 // Function to get cart items (implement this based on your cart system)
