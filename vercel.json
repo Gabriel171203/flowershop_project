@@ -2,15 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.js",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.css",
+      "src": "**/*.{js,html,css}",
       "use": "@vercel/static"
     },
     {
@@ -19,21 +11,6 @@
     }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/thank-you",
-      "dest": "/thank-you.html"
-    },
-    {
-      "src": "/pending-payment",
-      "dest": "/pending-payment.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
