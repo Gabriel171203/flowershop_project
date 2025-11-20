@@ -8,39 +8,25 @@
     {
       "src": "api/**/*.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "products.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "about.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "contact.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "thank-you.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "pending-payment.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "style.css",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/products", "dest": "/products.html" },
+    { "src": "/products.html", "status": 301, "headers": { "Location": "/products" } },
     { "src": "/about", "dest": "/about.html" },
+    { "src": "/about.html", "status": 301, "headers": { "Location": "/about" } },
     { "src": "/contact", "dest": "/contact.html" },
+    { "src": "/contact.html", "status": 301, "headers": { "Location": "/contact" } },
     { "src": "/thank-you", "dest": "/thank-you.html" },
     { "src": "/pending-payment", "dest": "/pending-payment.html" },
     { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "rewrites": [
+    { "source": "/products", "destination": "/products.html" },
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/thank-you", "destination": "/thank-you.html" },
+    { "source": "/pending-payment", "destination": "/pending-payment.html" }
   ]
 }
