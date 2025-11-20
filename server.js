@@ -71,7 +71,13 @@ app.use((req, res, next) => {
   next();
 });
 
+// Import routes
+const orderRoutes = require('./routes/orderRoutes');
+
 // API Routes
+app.use('/api/orders', orderRoutes);
+
+// Deprecated payment token endpoint (kept for backward compatibility)
 app.post('/api/payment/token', async (req, res) => {
   try {
     // Validasi data yang masuk

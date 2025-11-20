@@ -9,7 +9,7 @@ const pool = new Pool({
   } : false,
   max: 20, // Jumlah koneksi maksimum
   idleTimeoutMillis: 30000, // Tutup koneksi yang idle selama 30 detik
-  connectionTimeoutMillis: 2000, // Timeout koneksi 2 detik
+  connectionTimeoutMillis: 10000, // Timeout koneksi 10 detik
 });
 
 // Test koneksi saat aplikasi dimulai
