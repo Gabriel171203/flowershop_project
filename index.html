@@ -6,10 +6,61 @@
     <meta name="description" content="Toko bunga terbaik dengan koleksi bunga segar dan buatan tangan untuk semua momen spesial">
     <title>FlowerShop | Bunga Handmade untuk Semua Momen</title>
     <base href="/">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+    <style>
+        /* Basic reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; line-height: 1.6; color: #333; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+        
+        /* Header styles */
+        header { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
+        h1 { color: #4a6f7d; font-size: 1.8rem; }
+        
+        /* Navigation */
+        .main-nav ul { display: flex; list-style: none; }
+        .main-nav a { color: #4a6f7d; text-decoration: none; padding: 0.5rem 1rem; font-weight: 500; }
+        .main-nav a:hover { color: #2c3e50; }
+        
+        /* Hero section */
+        .hero { padding: 8rem 0 4rem; text-align: center; background: #f8f9fa; }
+        .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; color: #2c3e50; }
+        .hero p { font-size: 1.2rem; color: #666; max-width: 800px; margin: 0 auto 2rem; }
+        
+        /* Product grid */
+        .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
+        .card:hover { transform: translateY(-5px); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-content { padding: 1.5rem; }
+        .card h3 { margin-bottom: 0.5rem; color: #2c3e50; }
+        .price { font-weight: bold; color: #e74c3c; font-size: 1.2rem; margin: 0.5rem 0; }
+        
+        /* Buttons */
+        .btn { 
+            display: inline-block; 
+            background: #4a6f7d; 
+            color: white; 
+            padding: 0.8rem 1.5rem; 
+            border-radius: 4px; 
+            text-decoration: none; 
+            font-weight: 500; 
+            transition: background 0.3s ease; 
+        }
+        .btn:hover { background: #3a5a68; }
+        
+        /* Footer */
+        footer { background: #2c3e50; color: white; padding: 3rem 0; margin-top: 4rem; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .footer-section h3 { margin-bottom: 1rem; font-size: 1.3rem; }
+        .footer-section p, .footer-section a { color: #ecf0f1; margin-bottom: 0.5rem; display: block; text-decoration: none; }
+        .footer-section a:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
     <!-- Skip to main content for better accessibility -->
