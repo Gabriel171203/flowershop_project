@@ -5,188 +5,341 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Tentang FlowerShop Indah - Toko bunga dengan kualitas terbaik dan pelayanan ramah">
     <title>Tentang Kami - FlowerShop Indah</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4a6f7d',
+                        secondary: '#2c3e50',
+                        accent: '#e74c3c',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* Custom styles that can't be done with Tailwind */
+        .hamburger {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #2c3e50;
+            position: relative;
+        }
+        .hamburger:before,
+        .hamburger:after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 2px;
+            background: #2c3e50;
+            left: 0;
+            transition: all 0.3s;
+        }
+        .hamburger:before {
+            top: -6px;
+        }
+        .hamburger:after {
+            top: 6px;
+        }
+        .menu-toggle[aria-expanded="true"] .hamburger {
+            background: transparent;
+        }
+        .menu-toggle[aria-expanded="true"] .hamburger:before {
+            transform: rotate(45deg);
+            top: 0;
+        }
+        .menu-toggle[aria-expanded="true"] .hamburger:after {
+            transform: rotate(-45deg);
+            top: 0;
+        }
+    </style>
 </head>
-<body>
+<body class="font-sans text-gray-800 bg-white">
     <!-- Skip to main content for better accessibility -->
-    <a href="#main-content" class="skip-link">Langsung ke konten utama</a>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:rounded">
+        Langsung ke konten utama
+    </a>
 
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <h1>🌸 FlowerShop Indah</h1>
-                <button class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+    <!-- Header -->
+    <header class="bg-white shadow-md fixed w-full top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <h1 class="text-2xl md:text-3xl font-bold text-primary">
+                    <a href="/" class="flex items-center">
+                        <span class="mr-2">🌸</span> FlowerShop Indah
+                    </a>
+                </h1>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:block" aria-label="Main navigation">
+                    <ul class="flex space-x-6">
+                        <li><a href="/" class="text-gray-600 hover:text-primary transition-colors">Beranda</a></li>
+                        <li><a href="/products" class="text-gray-600 hover:text-primary transition-colors">Produk</a></li>
+                        <li><a href="/about" class="text-primary font-medium hover:text-secondary transition-colors" aria-current="page">Tentang Kami</a></li>
+                        <li><a href="/contact" class="text-gray-600 hover:text-primary transition-colors">Kontak</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- Mobile menu button -->
+                <button class="md:hidden p-2 focus:outline-none" id="mobile-menu-button" aria-label="Toggle menu" aria-expanded="false">
                     <span class="hamburger"></span>
                 </button>
-                <nav class="main-nav">
-                    <ul>
-                        <li><a href="index.html">Beranda</a></li>
-                        <li><a href="products.html">Produk</a></li>
-                        <li><a href="about.html" class="active" aria-current="page">Tentang Kami</a></li>
-                        <li><a href="contact.html">Kontak</a></li>
-                    </ul>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <div class="md:hidden hidden" id="mobile-menu">
+                <nav class="px-2 pt-2 pb-4 space-y-1">
+                    <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Beranda</a>
+                    <a href="/products" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Produk</a>
+                    <a href="/about" class="block px-3 py-2 rounded-md text-base font-medium text-primary bg-gray-100">Tentang Kami</a>
+                    <a href="/contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Kontak</a>
                 </nav>
             </div>
         </div>
     </header>
 
-    <main id="main-content">
-        <section class="page-header">
-            <div class="container">
-                <h1>Tentang Kami</h1>
-                <p>Mengenal lebih dekat dengan FlowerShop Indah</p>
+    <main id="main-content" class="pt-20">
+        <!-- Page Header -->
+        <section class="bg-gradient-to-r from-primary/10 to-accent/5 py-12 md:py-16">
+            <div class="container mx-auto px-4 text-center">
+                <h1 class="text-3xl md:text-4xl font-bold text-secondary mb-4">Tentang Kami</h1>
+                <p class="text-gray-600 max-w-2xl mx-auto">Mengenal lebih dekat dengan FlowerShop Indah</p>
             </div>
         </section>
 
-        <section class="about-intro">
-            <div class="container">
-                <div class="about-content">
-                    <div class="about-text" data-aos="fade-right" data-aos-duration="1000">
-                        <span class="section-subtitle">Tentang Kami</span>
-                        <h2 class="section-title">Selamat Datang di FlowerShop Indah</h2>
-                        <div class="divider"></div>
-                        <p class="about-desc">Sejak didirikan pada tahun 2020, FlowerShop Indah telah menjadi destinasi utama bagi pecinta bunga di seluruh Indonesia. Kami bangga menyajikan rangkaian bunga segar dan buatan tangan berkualitas tinggi yang dibuat dengan penuh cinta dan perhatian terhadap detail.</p>
-                        <p class="about-desc">Setiap rangkaian bunga yang kami buat adalah hasil karya tangan terampil tim kami, yang memastikan setiap kelopak dan daun ditempatkan dengan sempurna untuk menciptakan keindahan yang memukau.</p>
-                        <div class="about-features">
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle"></i>
-                                <span>Berkualitas Tinggi</span>
+        <!-- About Intro -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="md:w-1/2" data-aos="fade-right" data-aos-duration="1000">
+                        <span class="text-primary font-medium block mb-2">Tentang Kami</span>
+                        <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-6">Selamat Datang di FlowerShop Indah</h2>
+                        <div class="w-20 h-1 bg-accent mb-6"></div>
+                        <p class="text-gray-600 mb-6">Sejak didirikan pada tahun 2020, FlowerShop Indah telah menjadi destinasi utama bagi pecinta bunga di seluruh Indonesia. Kami bangga menyajikan rangkaian bunga segar dan buatan tangan berkualitas tinggi yang dibuat dengan penuh cinta dan perhatian terhadap detail.</p>
+                        <p class="text-gray-600 mb-8">Setiap rangkaian bunga yang kami buat adalah hasil karya tangan terampil tim kami, yang memastikan setiap kelopak dan daun ditempatkan dengan sempurna untuk menciptakan keindahan yang memukau.</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                            <div class="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
+                                <i class="fas fa-check-circle text-accent"></i>
+                                <span class="text-gray-700">Berkualitas Tinggi</span>
                             </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle"></i>
-                                <span>Handmade dengan Cinta</span>
+                            <div class="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
+                                <i class="fas fa-check-circle text-accent"></i>
+                                <span class="text-gray-700">Handmade dengan Cinta</span>
                             </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle"></i>
-                                <span>Desain Eksklusif</span>
+                            <div class="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
+                                <i class="fas fa-check-circle text-accent"></i>
+                                <span class="text-gray-700">Desain Eksklusif</span>
                             </div>
                         </div>
                     </div>
-                    <div class="about-image" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
-                        <div class="image-wrapper">
-                            <img src="https://source.unsplash.com/800x1000/?flower-shop" alt="Toko Bunga Indah" loading="lazy">
-                            <div class="experience-badge">
-                                <span class="years">4+</span>
-                                <span>Tahun Pengalaman</span>
+                    
+                    <div class="md:w-1/2 relative" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                        <div class="relative z-10 rounded-lg overflow-hidden shadow-xl">
+                            <img src="https://source.unsplash.com/800x1000/?flower-shop" alt="Toko Bunga Indah" class="w-full h-auto" loading="lazy">
+                            <div class="absolute -bottom-4 -right-4 bg-primary text-white px-6 py-3 rounded-lg shadow-lg">
+                                <span class="block text-2xl font-bold">4+</span>
+                                <span class="text-sm">Tahun Pengalaman</span>
                             </div>
                         </div>
-                        <div class="floating-shape"></div>
+                        <div class="absolute -z-10 w-64 h-64 bg-accent/10 rounded-full -bottom-10 -left-10"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="mission-vision">
-            <div class="container">
-                <div class="mission">
-                    <div class="icon">🎯</div>
-                    <h3>Misi Kami</h3>
-                    <p>Memberikan pengalaman berbelanja bunga yang menyenangkan dengan kualitas terbaik dan pelayanan yang ramah, sambil terus berinovasi dalam desain rangkaian bunga yang unik dan bermakna.</p>
-                </div>
-                <div class="vision">
-                    <div class="icon">👁️</div>
-                    <h3>Visi Kami</h3>
-                    <p>Menjadi toko bunga terdepan yang dikenal karena kualitas, kreativitas, dan pelayanan terbaik dalam menyampaikan pesan kasih sayang melalui keindahan bunga.</p>
+        <!-- Mission & Vision -->
+        <section class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h3 class="text-2xl font-bold text-secondary mb-4">Misi Kami</h3>
+                        <p class="text-gray-600">Memberikan pengalaman berbelanja bunga yang menyenangkan dengan kualitas terbaik dan pelayanan yang ramah, sambil terus berinovasi dalam desain rangkaian bunga yang unik dan bermakna.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                        <div class="text-4xl mb-4">👁️</div>
+                        <h3 class="text-2xl font-bold text-secondary mb-4">Visi Kami</h3>
+                        <p class="text-gray-600">Menjadi toko bunga terdepan yang dikenal karena kualitas, kreativitas, dan pelayanan terbaik dalam menyampaikan pesan kasih sayang melalui keindahan bunga.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="why-choose-us">
-            <div class="container">
-                <h2>Mengapa Memilih Kami?</h2>
-                <div class="features-grid">
-                    <div class="feature">
-                        <div class="feature-icon">🌸</div>
-                        <h3>Bunga Handmade</h3>
-                        <p>Setiap rangkaian bunga kami dibuat dengan tangan oleh pengrajin ahli, memberikan sentuhan personal dan unik pada setiap buket.</p>
+        <!-- Why Choose Us -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center text-secondary mb-12">Mengapa Memilih Kami?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow text-center">
+                        <div class="text-4xl mb-4">🌸</div>
+                        <h3 class="text-xl font-semibold text-secondary mb-3">Bunga Handmade</h3>
+                        <p class="text-gray-600">Setiap rangkaian bunga kami dibuat dengan tangan oleh pengrajin ahli, memberikan sentuhan personal dan unik pada setiap buket.</p>
                     </div>
-                    <div class="feature">
-                        <div class="feature-icon">🎨</div>
-                        <h3>Desain Eksklusif</h3>
-                        <p>Setiap rangkaian dirancang khusus untuk menciptakan kesan yang mendalam.</p>
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow text-center">
+                        <div class="text-4xl mb-4">🎨</div>
+                        <h3 class="text-xl font-semibold text-secondary mb-3">Desain Eksklusif</h3>
+                        <p class="text-gray-600">Setiap rangkaian dirancang khusus untuk menciptakan kesan yang mendalam.</p>
                     </div>
-                    <div class="feature">
-                        <div class="feature-icon">🚚</div>
-                        <h3>Pengiriman Cepat</h3>
-                        <p>Pengiriman tepat waktu untuk memastikan keindahan bunga tetap terjaga.</p>
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow text-center">
+                        <div class="text-4xl mb-4">🚚</div>
+                        <h3 class="text-xl font-semibold text-secondary mb-3">Pengiriman Cepat</h3>
+                        <p class="text-gray-600">Pengiriman tepat waktu untuk memastikan keindahan bunga tetap terjaga.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center text-secondary mb-12">Tim Kami</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                            <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Anggota Tim" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-xl font-semibold text-secondary">Sarah Wijaya</h3>
+                        <p class="text-primary">Florist Utama</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Anggota Tim" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-xl font-semibold text-secondary">Dewi Lestari</h3>
+                        <p class="text-primary">Desainer Bunga</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Anggota Tim" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-xl font-semibold text-secondary">Budi Santoso</h3>
+                        <p class="text-primary">Customer Service</p>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-about">
-                <h3>FlowerShop Indah</h3>
-                <p>Menyediakan rangkaian bunga terbaik untuk semua momen spesial dalam hidup Anda. Kami berkomitmen memberikan kualitas terbaik dengan sentuhan personal yang istimewa.</p>
-                <div class="social-links">
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+    <!-- Footer -->
+    <footer class="bg-secondary text-white pt-12 pb-6">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">FlowerShop Indah</h3>
+                    <p class="text-gray-300 text-sm">Menyediakan rangkaian bunga terbaik untuk semua momen spesial dalam hidup Anda.</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-white hover:text-accent transition-colors"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white hover:text-accent transition-colors"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white hover:text-accent transition-colors"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Tautan Cepat</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/" class="text-gray-300 hover:text-white transition-colors">Beranda</a></li>
+                        <li><a href="/products" class="text-gray-300 hover:text-white transition-colors">Produk</a></li>
+                        <li><a href="/about" class="text-gray-300 hover:text-white transition-colors">Tentang Kami</a></li>
+                        <li><a href="/contact" class="text-gray-300 hover:text-white transition-colors">Kontak</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Kontak Kami</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-2 text-accent"></i>
+                            <span>Jl. Bunga Indah No. 123, Jakarta</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-accent"></i>
+                            <span>+62 123 4567 890</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2 text-accent"></i>
+                            <span>info@flowershopindah.com</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Jam Buka</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li class="flex justify-between"><span>Senin - Jumat</span> <span>08.00 - 21.00 WIB</span></li>
+                        <li class="flex justify-between"><span>Sabtu - Minggu</span> <span>09.00 - 20.00 WIB</span></li>
+                    </ul>
                 </div>
             </div>
-            
-            <div class="footer-links">
-                <h4>Tautan Cepat</h4>
-                <ul>
-                    <li><a href="index.html">Beranda</a></li>
-                    <li><a href="products.html">Produk</a></li>
-                    <li><a href="about.html">Tentang Kami</a></li>
-                    <li><a href="contact.html">Kontak</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Galeri</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-contact">
-                <h4>Hubungi Kami</h4>
-                <p><i class="fas fa-phone-alt"></i> +62 123 4567 890</p>
-                <p><i class="fas fa-envelope"></i> info@flowershopindah.com</p>
-                <p><i class="fas fa-map-marker-alt"></i> Jl. Bunga Indah No. 123, Jakarta</p>
-                <p><i class="far fa-clock"></i> Buka Setiap Hari: 08.00 - 21.00 WIB</p>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; 2025 FlowerShop Indah. Semua hak dilindungi.</p>
-            <div class="footer-legal">
-                <a href="#">Kebijakan Privasi</a>
-                <span>|</span>
-                <a href="#">Syarat & Ketentuan</a>
-                <span>|</span>
-                <a href="#">Kebijakan Pengembalian</a>
+            <div class="border-t border-gray-700 pt-6">
+                <p class="text-center text-gray-400 text-sm">&copy; 2023 FlowerShop Indah. Semua hak dilindungi.</p>
             </div>
         </div>
     </footer>
-    
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <!-- JavaScript -->
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 bg-primary text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
     <script>
         // Mobile menu toggle
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.querySelector('.menu-toggle');
-            const mainNav = document.querySelector('.main-nav');
-            
-            menuToggle.addEventListener('click', function() {
-                const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                this.setAttribute('aria-expanded', !isExpanded);
-                mainNav.classList.toggle('active');
-                this.classList.toggle('active');
-            });
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true' || false;
+            mobileMenuButton.setAttribute('aria-expanded', !expanded);
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('block');
+        });
 
-            // Close menu when clicking on a nav link
-            document.querySelectorAll('.main-nav a').forEach(link => {
-                link.addEventListener('click', () => {
-                    menuToggle.setAttribute('aria-expanded', 'false');
-                    mainNav.classList.remove('active');
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('block');
+            }
+        });
+
+        // Back to top button
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
                     menuToggle.classList.remove('active');
                 });
             });
