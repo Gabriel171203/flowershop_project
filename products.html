@@ -5,12 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Temukan koleksi bunga terbaik kami - Buket bunga, rangkaian bunga, dan hadiah spesial untuk semua momen berharga">
     <title>Produk Bunga - FlowerShop Indah</title>
-    <base href="/">
-    <link rel="stylesheet" href="/style.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4a6f7d',
+                        secondary: '#2c3e50',
+                        accent: '#e74c3c',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <style>
+        /* Custom styles */
+        .hamburger {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #2c3e50;
+            position: relative;
+        }
+        .hamburger:before,
+        .hamburger:after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 2px;
+            background: #2c3e50;
+            left: 0;
+            transition: all 0.3s;
+        }
+        .hamburger:before { top: -6px; }
+        .hamburger:after { top: 6px; }
+        .menu-toggle[aria-expanded="true"] .hamburger { background: transparent; }
+        .menu-toggle[aria-expanded="true"] .hamburger:before {
+            transform: rotate(45deg);
+            top: 0;
+        }
+        .menu-toggle[aria-expanded="true"] .hamburger:after {
+            transform: rotate(-45deg);
+            top: 0;
+        }
+        
         /* Loading Overlay */
         .loading-overlay {
             display: none;
@@ -417,72 +473,103 @@
                 font-size: 0.9rem;
             }
         }
-    </style>
+        </style>
 </head>
-<body>
+<body class="font-sans text-gray-800 bg-white">
     <!-- Skip to main content for better accessibility -->
-    <a href="#main-content" class="skip-link">Langsung ke konten utama</a>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:rounded">
+        Langsung ke konten utama
+    </a>
 
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <h1>🌸 FlowerShop Indah</h1>
-                <button class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+    <!-- Header -->
+    <header class="bg-white shadow-md fixed w-full top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <h1 class="text-2xl md:text-3xl font-bold text-primary">
+                    <a href="/" class="flex items-center">
+                        <span class="mr-2">🌸</span> FlowerShop Indah
+                    </a>
+                </h1>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:block" aria-label="Main navigation">
+                    <ul class="flex space-x-6">
+                        <li><a href="index.html" class="text-gray-600 hover:text-primary transition-colors">Beranda</a></li>
+                        <li><a href="products.html" class="text-primary font-medium hover:text-secondary transition-colors">Produk</a></li>
+                        <li><a href="about.html" class="text-gray-600 hover:text-primary transition-colors">Tentang Kami</a></li>
+                        <li><a href="contact.html" class="text-gray-600 hover:text-primary transition-colors">Kontak</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- Mobile menu button -->
+                <button class="md:hidden p-2 focus:outline-none" id="mobile-menu-button" aria-label="Toggle menu" aria-expanded="false">
                     <span class="hamburger"></span>
                 </button>
-                <nav class="main-nav">
-                    <ul>
-                        <li><a href="index.html">Beranda</a></li>
-                        <li><a href="products.html" class="active" aria-current="page">Produk</a></li>
-                        <li><a href="about.html">Tentang Kami</a></li>
-                        <li><a href="contact.html">Kontak</a></li>
-                    </ul>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <div class="md:hidden hidden" id="mobile-menu">
+                <nav class="px-2 pt-2 pb-4 space-y-1">
+                    <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Beranda</a>
+                    <a href="products.html" class="block px-3 py-2 rounded-md text-base font-medium text-primary bg-gray-100">Produk</a>
+                    <a href="about.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Tentang Kami</a>
+                    <a href="contact.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Kontak</a>
                 </nav>
             </div>
         </div>
     </header>
 
-    <main id="main-content">
-        <section class="page-header">
-            <div class="container">
-                <h1 class="page-title">Koleksi Bunga Kami</h1>
-                <p class="page-subtitle">Temukan rangkaian bunga terbaik untuk setiap momen spesial</p>
-                
-                <div class="filters">
-                    <button class="filter-btn active" data-filter="all">Semua Produk</button>
-                    <button class="filter-btn" data-filter="buket">Buket Bunga</button>
-                    <button class="filter-btn" data-filter="single">Bunga Single</button>
-                    <button class="filter-btn" data-filter="papan">Bunga Papan</button>
+    <main id="main-content" class="pt-20">
+        <!-- Page Header -->
+        <section class="bg-gradient-to-r from-primary/10 to-accent/5 py-12 md:py-16">
+            <div class="container mx-auto px-4 text-center">
+                <h1 class="text-3xl md:text-4xl font-bold text-secondary mb-4">Koleksi Bunga Kami</h1>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-6">Temukan rangkaian bunga terbaik untuk setiap momen spesial</p>
+                <div class="flex flex-wrap justify-center gap-2 md:gap-4">
+                    <button class="filter-btn px-4 py-2 rounded-full bg-primary text-white font-medium hover:bg-secondary transition-colors" data-category="all">Semua</button>
+                    <button class="filter-btn px-4 py-2 rounded-full bg-white border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors" data-category="single">Bunga Single</button>
+                    <button class="filter-btn px-4 py-2 rounded-full bg-white border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors" data-category="buket">Buket Bunga</button>
+                    <button class="filter-btn px-4 py-2 rounded-full bg-white border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors" data-category="hampers">Hampers</button>
                 </div>
             </div>
         </section>
 
-        <section class="products-section">
-            <div class="container">
-                <div class="products-grid">
-                    <!-- Bunga Single 1 -->
-                    <article class="product-card" data-category="single">
-                        <div class="product-image">
-                            <img src="bungasingle.jpg" alt="Bunga Kawat Single" loading="lazy">
-                            <div class="product-badges">
-                                <span class="badge best-seller">Terlaris</span>
+        <!-- Products Grid -->
+        <section class="py-12 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <!-- Product 1 -->
+                    <article class="product-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300" data-category="single">
+                        <div class="relative overflow-hidden group">
+                            <img src="/bungasingle.jpg" alt="Bunga Kawat Single" class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105">
+                            <div class="absolute top-2 left-2">
+                                <span class="bg-accent text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">Baru</span>
                             </div>
-                            <div class="product-actions">
-                                <button class="quick-view" aria-label="Lihat detail">👁️</button>
-                                <button class="buy-now" data-product-id="prod-d26v6tk0x" data-product-name="Bunga Kawat Single" data-product-price="12000" aria-label="Beli sekarang">💳 Beli Sekarang</button>
+                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                <button class="quick-view bg-white rounded-full w-10 h-10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors" aria-label="Lihat detail">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="add-to-cart bg-white rounded-full w-10 h-10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors" aria-label="Tambah ke keranjang">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </button>
                             </div>
                         </div>
-                        <div class="product-info">
-                            <h3>Bunga Kawat Single</h3>
-                            <div class="product-price">
-                                <span class="price">Rp 12.000</span>
-                                <span class="original-price">Rp 15.000</span>
-                                <span class="discount">20%</span>
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-1">Bunga Kawat Single</h3>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-accent font-bold text-lg">Rp 50.000</span>
+                                <div class="flex items-center text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span class="text-gray-600 text-sm ml-1">(24)</span>
+                                </div>
                             </div>
-                            <div class="product-rating">
-                                <span class="stars">★★★★★</span>
-                                <span class="review-count">(128 ulasan)</span>
-                            </div>
+                            <button class="w-full bg-primary hover:bg-secondary text-white font-medium py-2 px-4 rounded transition-colors" data-product-id="1">
+                                Beli Sekarang
+                            </button>
                         </div>
                     </article>
 
@@ -661,149 +748,357 @@
         </section>
 
         <!-- Customer Data Form -->
-        <section class="customer-form-section" style="padding: 4rem 0; background-color: #f9f9f9; margin-top: 3rem;">
-            <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-                <div class="section-header" style="text-align: center; margin-bottom: 2.5rem;">
-                    <h2 style="color: #333; font-size: 2rem; margin-bottom: 0.5rem;">Data Pembeli</h2>
-                    <p style="color: #666; font-size: 1.1rem;">Silakan isi data diri Anda untuk melanjutkan pembayaran</p>
+        <section class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto">
+                    <div class="text-center mb-10">
+                        <h2 class="text-3xl font-bold text-secondary mb-2">Data Pembeli</h2>
+                        <p class="text-gray-600">Silakan isi data diri Anda untuk melanjutkan pembayaran</p>
+                    </div>
+
+                    <form id="customer-data-form" class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="form-group">
+                                <label for="customer-name" class="block text-gray-700 font-medium mb-2">
+                                    Nama Lengkap <span class="text-accent">*</span>
+                                </label>
+                                <input type="text" id="customer-name" name="customer-name" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                    placeholder="Masukkan nama lengkap">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="customer-phone" class="block text-gray-700 font-medium mb-2">
+                                    Nomor Telepon <span class="text-accent">*</span>
+                                </label>
+                                <input type="tel" id="customer-phone" name="customer-phone" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                    placeholder="Contoh: 081234567890">
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="customer-email" class="block text-gray-700 font-medium mb-2">
+                                Email <span class="text-accent">*</span>
+                            </label>
+                            <input type="email" id="customer-email" name="customer-email" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                placeholder="email@contoh.com">
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="delivery-address" class="block text-gray-700 font-medium mb-2">
+                                Alamat Pengiriman <span class="text-accent">*</span>
+                            </label>
+                            <textarea id="delivery-address" name="delivery-address" rows="3" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none min-h-[120px]"
+                                placeholder="Masukkan alamat lengkap pengiriman"></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="form-group">
+                                <label for="delivery-date" class="block text-gray-700 font-medium mb-2">
+                                    Tanggal Pengiriman <span class="text-accent">*</span>
+                                </label>
+                                <input type="date" id="delivery-date" name="delivery-date" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="delivery-time" class="block text-gray-700 font-medium mb-2">
+                                    Waktu Pengiriman <span class="text-accent">*</span>
+                                </label>
+                                <select id="delivery-time" name="delivery-time" required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white">
+                                    <option value="">Pilih Waktu</option>
+                                    <option value="09:00-12:00">Pagi (09:00 - 12:00)</option>
+                                    <option value="12:00-15:00">Siang (12:00 - 15:00)</option>
+                                    <option value="15:00-18:00">Sore (15:00 - 18:00)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center mb-8">
+                            <input type="checkbox" id="save-info" name="save-info" checked 
+                                class="w-5 h-5 text-primary rounded border-gray-300 focus:ring-primary">
+                            <label for="save-info" class="ml-2 text-gray-600">
+                                Simpan informasi untuk transaksi selanjutnya
+                            </label>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8">
+                            <button type="button" class="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                                Kembali
+                            </button>
+                            <button type="submit" class="px-8 py-3 bg-primary hover:bg-secondary text-white font-medium rounded-lg transition-colors">
+                                Lanjutkan ke Pembayaran
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                
-                <form id="customer-data-form" class="customer-form" style="max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
-                    <div class="form-row" style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1.5rem;">
-                        <div class="form-group" style="flex: 1; min-width: 250px; margin-bottom: 1rem;">
-                            <label for="customer-name" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #444;">
-                                Nama Lengkap <span style="color: #e74c3c;">*</span>
-                            </label>
-                            <input type="text" id="customer-name" name="customer-name" 
-                                   style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;"
-                                   required placeholder="Masukkan nama lengkap" minlength="3" maxlength="100">
-                            <div style="font-size: 0.85rem; color: #666; margin-top: 0.5rem; font-style: italic;">Contoh: Budi Santoso</div>
-                        </div>
-                        
-                        <div class="form-group" style="flex: 1; min-width: 250px; margin-bottom: 1rem;">
-                            <label for="customer-email" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #444;">
-                                Email <span style="color: #e74c3c;">*</span>
-                            </label>
-                            <input type="email" id="customer-email" name="customer-email" 
-                                   style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;"
-                                   required placeholder="contoh: email@domain.com" 
-                                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                                   title="Masukkan alamat email yang valid, contoh: nama@domain.com">
-                            <div style="font-size: 0.85rem; color: #666; margin-top: 0.5rem; font-style: italic;">
-                                Kami akan mengirim konfirmasi ke email ini
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row" style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1.5rem;">
-                        <div class="form-group" style="flex: 1; min-width: 250px; margin-bottom: 1rem;">
-                            <label for="customer-phone" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #444;">
-                                Nomor Telepon <span style="color: #e74c3c;">*</span>
-                            </label>
-                            <div style="display: flex;">
-                                <span style="background-color: #f5f5f5; border: 1px solid #ddd; border-right: none; border-radius: 6px 0 0 6px; padding: 0 1rem; display: flex; align-items: center; font-size: 0.9rem; color: #555;">+62</span>
-                                <input type="tel" id="customer-phone" name="customer-phone" 
-                                       style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 0 6px 6px 0; font-size: 1rem;"
-                                       required placeholder="81234567890" pattern="[0-9]{9,15}" minlength="9" maxlength="15">
-                            </div>
-                            <div style="font-size: 0.85rem; color: #666; margin-top: 0.5rem; font-style: italic;">
-                                Contoh: 81234567890 (tanpa +62)
-                            </div>
-                        </div>
-                        
-                        <div class="form-group" style="flex: 1; min-width: 250px; margin-bottom: 1rem;">
-                            <label for="customer-address" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #444;">
-                                Alamat Pengiriman
-                            </label>
-                            <textarea id="customer-address" name="customer-address" 
-                                     style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; min-height: 100px; resize: vertical;"
-                                     placeholder="Masukkan alamat lengkap pengiriman" rows="2"></textarea>
-                            <div style="font-size: 0.85rem; color: #666; margin-top: 0.5rem; font-style: italic;">
-                                Opsional, jika berbeda dengan alamat profil
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; margin: 1.5rem 0;">
-                        <input type="checkbox" id="save-info" name="save-info" checked style="margin-right: 0.75rem; width: 18px; height: 18px;">
-                        <label for="save-info" style="color: #555; font-size: 0.95rem;">
-                            Simpan informasi untuk transaksi selanjutnya
-                        </label>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #eee;">
-                        <button type="button" id="reset-form" 
-                                style="padding: 0.75rem 1.5rem; border: 1px solid #ddd; border-radius: 6px; background-color: #f5f5f5; color: #555; font-weight: 500; cursor: pointer; transition: all 0.3s ease; font-size: 1rem;">
-                            Reset Form
-                        </button>
-                        <button type="submit" id="save-customer-data" 
-                                style="padding: 0.75rem 1.5rem; border: none; border-radius: 6px; background-color: #ff6b6b; color: white; font-weight: 500; cursor: pointer; transition: all 0.3s ease; font-size: 1rem;">
-                            Simpan Data
-                        </button>
-                    </div>
-                </form>
             </div>
         </section>
 
-    <!-- Loading Overlay -->
-    <div id="loading-overlay" class="loading-overlay">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">Memproses pembayaran...</div>
-    </div>
-
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-about">
-                <h3>FlowerShop Indah</h3>
-                <p>Menyediakan rangkaian bunga terbaik untuk semua momen spesial dalam hidup Anda. Kami berkomitmen memberikan kualitas terbaik dengan sentuhan personal yang istimewa.</p>
-                <div class="social-links">
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+    <!-- Footer -->
+    <footer class="bg-secondary text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div class="footer-section">
+                    <h3 class="text-xl font-semibold mb-4">Tentang Kami</h3>
+                    <p class="text-gray-300 mb-4">FlowerShop Indah menyediakan rangkaian bunga terbaik untuk semua momen spesial Anda. Dengan pengalaman lebih dari 5 tahun, kami berkomitmen memberikan produk berkualitas tinggi dan pelayanan terbaik.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="text-xl font-semibold mb-4">Tautan Cepat</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors">Beranda</a></li>
+                        <li><a href="products.html" class="text-gray-300 hover:text-white transition-colors">Produk</a></li>
+                        <li><a href="about.html" class="text-gray-300 hover:text-white transition-colors">Tentang Kami</a></li>
+                        <li><a href="contact.html" class="text-gray-300 hover:text-white transition-colors">Kontak</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Syarat & Ketentuan</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Kebijakan Privasi</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="text-xl font-semibold mb-4">Kontak Kami</h3>
+                    <div class="space-y-3">
+                        <p class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 w-5 text-center"></i>
+                            <span>Jl. Bunga Indah No. 123, Jakarta 12345, Indonesia</span>
+                        </p>
+                        <p class="flex items-center">
+                            <i class="fas fa-phone-alt mr-3 w-5 text-center"></i>
+                            <span>+62 123 4567 890</span>
+                        </p>
+                        <p class="flex items-center">
+                            <i class="fas fa-envelope mr-3 w-5 text-center"></i>
+                            <span>info@flowershopindah.com</span>
+                        </p>
+                        <p class="flex items-center">
+                            <i class="far fa-clock mr-3 w-5 text-center"></i>
+                            <span>Buka Setiap Hari: 08.00 - 21.00 WIB</span>
+                        </p>
+                    </div>
                 </div>
             </div>
             
-            <div class="footer-links">
-                <h4>Tautan Cepat</h4>
-                <ul>
-                    <li><a href="index.html">Beranda</a></li>
-                    <li><a href="products.html">Produk</a></li>
-                    <li><a href="about.html">Tentang Kami</a></li>
-                    <li><a href="contact.html">Kontak</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Galeri</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-contact">
-                <h4>Hubungi Kami</h4>
-                <p><i class="fas fa-phone-alt"></i> +62 123 4567 890</p>
-                <p><i class="fas fa-envelope"></i> info@flowershopindah.com</p>
-                <p><i class="fas fa-map-marker-alt"></i> Jl. Bunga Indah No. 123, Jakarta</p>
-                <p><i class="far fa-clock"></i> Buka Setiap Hari: 08.00 - 21.00 WIB</p>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; 2025 FlowerShop Indah. Semua hak dilindungi.</p>
-            <div class="footer-legal">
-                <a href="#">Kebijakan Privasi</a>
-                <span>|</span>
-                <a href="#">Syarat & Ketentuan</a>
-                <span>|</span>
-                <a href="#">Kebijakan Pengembalian</a>
+            <div class="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-300 mb-4 md:mb-0">&copy; 2025 FlowerShop Indah. Semua hak dilindungi.</p>
+                <div class="flex items-center space-x-6">
+                    <span class="text-gray-500">Pembayaran Aman dengan:</span>
+                    <div class="flex space-x-2">
+                        <span class="bg-white rounded p-1">
+                            <i class="fab fa-cc-visa text-2xl text-blue-800"></i>
+                        </span>
+                        <span class="bg-white rounded p-1">
+                            <i class="fab fa-cc-mastercard text-2xl text-red-600"></i>
+                        </span>
+                        <span class="bg-white rounded p-1">
+                            <i class="fab fa-cc-paypal text-2xl text-blue-600"></i>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts should be loaded in this order -->
-    <script src="js/script.js"></script>
-    <script src="js/products.js"></script>
-    <!-- Load payment.js as a module -->
-    <script type="module" src="js/payment.js"></script>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-70 flex flex-col items-center justify-center z-50 hidden">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
+        <p class="mt-4 text-white text-lg font-medium">Memproses pembayaran...</p>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-secondary transition-colors duration-300 opacity-0 invisible">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+                mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+                mobileMenu.classList.toggle('hidden');
+                
+                // Toggle icon
+                const icon = mobileMenuButton.querySelector('.hamburger');
+                if (isExpanded) {
+                    icon.style.background = '#2c3e50';
+                    icon.style.transform = 'rotate(0)';
+                } else {
+                    icon.style.background = 'transparent';
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        }
+
+        // Filter products by category
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const productCards = document.querySelectorAll('.product-card');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.getAttribute('data-category');
+                
+                // Update active state
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('bg-primary', 'text-white');
+                    btn.classList.add('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+                });
+                
+                button.classList.remove('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+                button.classList.add('bg-primary', 'text-white');
+                
+                // Filter products
+                productCards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-category') === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Handle product quick view
+        const quickViewButtons = document.querySelectorAll('.quick-view');
+        
+        quickViewButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const productCard = button.closest('.product-card');
+                const productName = productCard.querySelector('h3').textContent;
+                const productPrice = productCard.querySelector('.price').textContent;
+                
+                // Show quick view modal (you can implement this)
+                alert(`Quick View: ${productName}\nHarga: ${productPrice}`);
+            });
+        });
+
+        // Handle add to cart
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const productCard = button.closest('.product-card');
+                const productName = productCard.querySelector('h3').textContent;
+                const productPrice = productCard.querySelector('.price').textContent;
+                
+                // Add to cart logic (you can implement this)
+                alert(`Ditambahkan ke keranjang: ${productName}\nHarga: ${productPrice}`);
+            });
+        });
+
+        // Handle form submission
+        const customerForm = document.getElementById('customer-data-form');
+        
+        if (customerForm) {
+            customerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Show loading overlay
+                document.getElementById('loading-overlay').classList.remove('hidden');
+                document.getElementById('loading-overlay').classList.add('flex');
+                
+                try {
+                    // Get form data
+                    const formData = {
+                        name: document.getElementById('customer-name').value,
+                        phone: document.getElementById('customer-phone').value,
+                        email: document.getElementById('customer-email').value,
+                        address: document.getElementById('delivery-address').value,
+                        deliveryDate: document.getElementById('delivery-date').value,
+                        deliveryTime: document.getElementById('delivery-time').value,
+                        saveInfo: document.getElementById('save-info').checked
+                    };
+                    
+                    // Here you would typically send this data to your backend
+                    // For example:
+                    // const response = await fetch('/api/orders', {
+                    //     method: 'POST',
+                    //     headers: {
+                    //         'Content-Type': 'application/json',
+                    //     },
+                    //     body: JSON.stringify(formData)
+                    // });
+                    // const data = await response.json();
+                    
+                    // Simulate API call
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    
+                    // Redirect to payment page or show success message
+                    alert('Pesanan berhasil dibuat! Anda akan diarahkan ke halaman pembayaran.');
+                    // window.location.href = '/checkout.html';
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat memproses pesanan. Silakan coba lagi.');
+                } finally {
+                    // Hide loading overlay
+                    document.getElementById('loading-overlay').classList.add('hidden');
+                    document.getElementById('loading-overlay').classList.remove('flex');
+                }
+            });
+        }
+
+        // Back to top button
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Set minimum date for delivery date (tomorrow)
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        const dd = String(tomorrow.getDate()).padStart(2, '0');
+        const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        const yyyy = tomorrow.getFullYear();
+        
+        const minDate = yyyy + '-' + mm + '-' + dd;
+        const deliveryDateInput = document.getElementById('delivery-date');
+        
+        if (deliveryDateInput) {
+            deliveryDateInput.setAttribute('min', minDate);
+            
+            // Set default date to tomorrow if not set
+            if (!deliveryDateInput.value) {
+                deliveryDateInput.value = minDate;
+            }
+        }
+    </script>
 </body>
 </html>
