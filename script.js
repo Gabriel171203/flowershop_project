@@ -1,3 +1,45 @@
+// Fungsi untuk chat admin WhatsApp
+function chatAdminCustom(event) {
+    event.preventDefault();
+    const phoneNumber = '6281234567890'; // Ganti dengan nomor admin
+    const message = encodeURIComponent('Halo, saya ingin memesan buket custom');
+    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+    return false;
+}
+
+// Inisialisasi event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Inisialisasi tombol add-to-cart
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.add-to-cart')) {
+            const button = e.target.closest('.add-to-cart');
+            const productCard = button.closest('.product-card');
+            
+            if (productCard) {
+                const productId = productCard.dataset.id;
+                const productName = productCard.querySelector('.product-title')?.textContent || 'Produk';
+                const productPrice = parseFloat(productCard.dataset.price) || 0;
+                const productCategory = productCard.dataset.category || 'buket';
+                
+                if (productId && productName) {
+                    addToCart(productId, productName, productPrice, productCategory);
+                }
+            }
+        }
+    });
+
+    // Inisialisasi form order
+    const orderForm = document.getElementById('customer-data-form');
+    if (orderForm) {
+        orderForm.addEventListener('submit', submitOrder);
+    }
+
+    // Inisialisasi tombol chat admin
+    document.querySelectorAll('[onclick*="chatAdminCustom"]').forEach(btn => {
+        btn.onclick = chatAdminCustom;
+    });
+});
+
 // Format rupiah
 function formatRupiah(amount) {
     return new Intl.NumberFormat('id-ID', {
