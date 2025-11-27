@@ -1167,16 +1167,29 @@
     
     <!-- Load scripts at the end of body to ensure DOM is ready -->
     <script src="js/products-api.js"></script>
-    <script src="js/script.js"></script>
+    <script src="script.js"></script>
     <!-- DISABLED: <script src="fix-products-checkout.js"></script> to prevent auto-show modal -->
+    
+    <!-- Verify scripts are loaded -->
+    <script>
+        console.log('🔍 Script loading verification:');
+        console.log('- productsAPI:', typeof productsAPI !== 'undefined' ? '✅ Loaded' : '❌ Not found');
+        console.log('- setupCheckoutButton:', typeof setupCheckoutButton !== 'undefined' ? '✅ Loaded' : '❌ Not found');
+        console.log('- initCart:', typeof initCart !== 'undefined' ? '✅ Loaded' : '❌ Not found');
+    </script>
     
     <!-- Initialize Products API -->
     <script>
-        // Ensure productsAPI is available and initialized
-        if (typeof productsAPI !== 'undefined') {
-            console.log('🌸 Initializing products from API...');
-            // Load products when page loads
-            document.addEventListener('DOMContentLoaded', async () => {
+        // Wait for DOM and all scripts to be ready
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🔍 Script loading verification:');
+            console.log('- productsAPI:', typeof productsAPI !== 'undefined' ? '✅ Loaded' : '❌ Not found');
+            console.log('- setupCheckoutButton:', typeof setupCheckoutButton !== 'undefined' ? '✅ Loaded' : '❌ Not found');
+            console.log('- initCart:', typeof initCart !== 'undefined' ? '✅ Loaded' : '❌ Not found');
+            
+            // Ensure productsAPI is available and initialized
+            if (typeof productsAPI !== 'undefined') {
+                console.log('🌸 Initializing products from API...');
                 try {
                     await productsAPI.fetchProducts();
                     productsAPI.renderProducts();
@@ -1184,19 +1197,24 @@
                     // Setup checkout button after products are loaded
                     setTimeout(() => {
                         console.log('🔧 Setting up checkout button on products page...');
+                        // Wait for script.js to be fully loaded
                         if (typeof setupCheckoutButton === 'function') {
                             setupCheckoutButton();
+                        } else if (typeof initCart === 'function') {
+                            // Fallback to initCart if setupCheckoutButton is not available
+                            console.log('🛒 Using initCart fallback...');
+                            initCart();
                         } else {
-                            console.error('❌ setupCheckoutButton function not found');
+                            console.error('❌ Neither setupCheckoutButton nor initCart functions found');
                         }
-                    }, 1000);
+                    }, 1500);
                 } catch (error) {
                     console.error('❌ Failed to load products:', error);
                 }
-            });
-        } else {
-            console.error('❌ productsAPI not found. Check if js/products-api.js loaded correctly.');
-        }
+            } else {
+                console.error('❌ productsAPI not found. Check if js/products-api.js loaded correctly.');
+            }
+        });
     </script>
 </body>
 </html>

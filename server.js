@@ -59,6 +59,21 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Serve static files from the root directory
 app.use(express.static(__dirname));
 
+// Serve JavaScript files with proper MIME type
+app.get('/js/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, 'js', filename);
+  
+  // Check if file exists
+  if (fs.existsSync(filePath)) {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.sendFile(filePath);
+  } else {
+    console.error('❌ JS file not found:', filePath);
+    res.status(404).send('JavaScript file not found');
+  }
+});
+
 // Serve images from local file system
 app.get('/images/:filename', (req, res) => {
   const filename = req.params.filename;

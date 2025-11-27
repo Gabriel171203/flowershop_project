@@ -931,7 +931,7 @@ async function loadProducts() {
     try {
         console.log('🔄 Loading products from API...');
         
-        const response = await fetch('https://your-backend.onrender.com/api/products');
+        const response = await fetch(`/api/products`);
         const result = await response.json();
         
         console.log('📥 API Response:', result);
@@ -1602,7 +1602,7 @@ async function saveOrderToDatabase(paymentResult) {
         console.log('📤 Sending order data:', JSON.stringify(orderData, null, 2));
         
         // Send to backend
-        const response = await fetch('https://your-backend.onrender.com/api/orders/save', {
+        const response = await fetch(`/api/orders/save`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
