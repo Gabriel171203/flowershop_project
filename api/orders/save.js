@@ -1,7 +1,39 @@
 // Load environment variables
 require('dotenv').config();
 
-const db = require('../config/db');
+// Inline database configuration
+const { Pool } = require('pg');
+
+const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { 
+    rejectUnauthorized: false 
+  } : false,
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
+});
+
+// Database query function
+const query = async (text, params) => {
+  const start = Date.now();
+  try {
+    const res = await db.query(text, params);
+    const duration = Date.now() - start;
+    console.log(`📝 Query berhasil dieksekusi dalam ${duration}ms`, { 
+      query: text, 
+      params: params || 'Tidak ada parameter' 
+    });
+    return res;
+  } catch (error) {
+    console.error('❌ Error saat mengeksekusi query:', {
+      error: error.message,
+      query: text,
+      params: params || 'Tidak ada parameter'
+    });
+    throw error;
+  }
+};
 
 // Vercel serverless function handler
 module.exports = async function handler(req, res) {
@@ -22,7 +54,7 @@ module.exports = async function handler(req, res) {
       console.log('📤 Saving order:', JSON.stringify(orderData, null, 2));
 
       // Insert order into database
-      const result = await db.query(`
+      const result = await query(`
         INSERT INTO orders (
           customer_name, customer_email, customer_phone, 
           delivery_address, delivery_date, delivery_time,
