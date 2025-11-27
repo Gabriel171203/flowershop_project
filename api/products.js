@@ -19,24 +19,35 @@ module.exports = async function handler(req, res) {
     if (req.method === 'GET') {
       console.log('🌐 Fetching products from database...');
       
-      // Query products from database (simplified without cloudinary_images)
+      // Query products from database
       const result = await db.query(`
-        SELECT p.*
+        SELECT p.*, 
+               json_agg(
+                 json_build_object(
+                   'id', ci.id,
+                   'cloudinary_url', ci.cloudinary_url,
+                   'is_primary', ci.is_primary
+                 ) ORDER BY ci.is_primary DESC
+               ) as images
         FROM products p
+        LEFT JOIN cloudinary_images ci ON p.id = ci.product_id
+        GROUP BY p.id
         ORDER BY p.created_at DESC
       `);
 
       const products = result.rows.map(product => {
-        // Use placeholder images or empty array for now
-        const images = [];
-        
+        // Format images array
+        const images = product.images && product.images[0] && product.images[0].id 
+          ? product.images.filter(img => img.cloudinary_url).map(img => img.cloudinary_url)
+          : [];
+
         return {
           id: product.id,
           name: product.name,
           description: product.description,
           price: parseFloat(product.price),
           images: images,
-          primary_image: null,
+          primary_image: images[0] || null,
           category: product.category || 'Bunga',
           stock: product.stock || 10
         };
