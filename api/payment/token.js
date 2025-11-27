@@ -1,6 +1,6 @@
 const midtransClient = require('midtrans-client');
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
     // Log incoming request
     console.log('[/api/payment/token] Request received:', {
         method: req.method,

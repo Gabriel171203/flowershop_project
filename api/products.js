@@ -3,8 +3,8 @@ require('dotenv').config();
 
 const db = require('../config/db');
 
-// Handler for Vercel serverless
-module.exports = async (req, res) => {
+// Vercel serverless function handler
+export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -75,4 +75,4 @@ module.exports = async (req, res) => {
       details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
-};
+}
