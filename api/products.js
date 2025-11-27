@@ -30,7 +30,7 @@ module.exports = async function handler(req, res) {
                  ) ORDER BY ci.is_primary DESC
                ) as images
         FROM products p
-        LEFT JOIN cloudinary_images ci ON p.id = ci.product_id
+        LEFT JOIN images ci ON p.id = ci.product_id
         GROUP BY p.id
         ORDER BY p.created_at DESC
       `);
