@@ -2,26 +2,26 @@
   "version": 2,
   "builds": [
     {
-      "src": "*.{js,html,css}",
-      "use": "@vercel/static"
-    },
-    {
       "src": "api/**/*.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "**/*.{js,html,css,png,jpg,jpeg,gif,svg,ico,woff,woff2,ttf,eot}",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {"src": "/api/products", "dest": "/api/products.js"},
     {"src": "/api/orders/save", "dest": "/api/orders/save.js"},
-    { "src": "/api/payment/(.*)", "dest": "/api/payment/$1.js" },
-    { "src": "/products", "dest": "/products.html" },
-    { "src": "/products.html", "status": 301, "headers": { "Location": "/products" } },
-    { "src": "/about", "dest": "/about.html" },
-    { "src": "/about.html", "status": 301, "headers": { "Location": "/about" } },
-    { "src": "/contact", "dest": "/contact.html" },
-    { "src": "/contact.html", "status": 301, "headers": { "Location": "/contact" } },
-    { "src": "/thank-you", "dest": "/thank-you.html" },
-    { "src": "/pending-payment", "dest": "/pending-payment.html" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    {"src": "/api/payment/(.*)", "dest": "/api/payment/$1.js"},
+    {"src": "/products", "dest": "/products.html"},
+    {"src": "/products.html", "status": 301, "headers": {"Location": "/products"}},
+    {"src": "/about", "dest": "/about.html"},
+    {"src": "/about.html", "status": 301, "headers": {"Location": "/about"}},
+    {"src": "/contact", "dest": "/contact.html"},
+    {"src": "/contact.html", "status": 301, "headers": {"Location": "/contact"}},
+    {"src": "/thank-you", "dest": "/thank-you.html"},
+    {"src": "/pending-payment", "dest": "/pending-payment.html"},
+    {"src": "/(.*)", "dest": "/index.html"}
   ]
 }
