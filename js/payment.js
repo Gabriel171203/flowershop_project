@@ -73,13 +73,13 @@ async function handlePayment(product, paymentType) {
         const order = {
             transaction_details: {
                 order_id: `ORDER-${Date.now()}`,
-                gross_amount: parseInt(product.price) // Pastikan dalam bentuk number
+                gross_amount: parseInt(product.price)
             },
             item_details: [{
                 id: product.id,
                 price: parseInt(product.price),
                 quantity: 1,
-                name: product.name.substring(0, 50), // Batas panjang nama produk
+                name: product.name.substring(0, 50),
                 category: 'Bunga',
                 merchant_name: 'FlowerShop Indah'
             }],
@@ -89,21 +89,77 @@ async function handlePayment(product, paymentType) {
                 phone: customerPhone,
                 billing_address: {
                     first_name: customerName,
-                    address: 'Jl. Bunga Indah No. 123',
+                    address: customerAddress || 'Jl. Bunga Indah No. 123',
                     city: 'Jakarta',
                     postal_code: '12345',
                     phone: customerPhone,
                     country_code: 'IDN'
                 }
             },
+            // Pengaturan pembayaran
+            payment_type: 'qris', // Default ke QRIS, bisa diganti sesuai pilihan user
+            // Aktifkan metode pembayaran yang didukung
+            enabled_payments: [
+                'credit_card',
+                'gopay',
+                'qris',
+                'shopeepay',
+                'bank_transfer',
+                'bca_klikbca',
+                'bca_klikpay',
+                'bri_epay',
+                'cimb_clicks',
+                'danamon_online',
+                'echannel',
+                'permata_va',
+                'bca_va',
+                'bni_va',
+                'bri_va',
+                'other_va',
+                'indomaret',
+                'alfamart',
+                'akulaku'
+            ],
+            // Pengaturan khusus untuk QRIS
+            qris: {
+                acquirer: 'gopay' // atau 'shopee' tergantung preferensi
+            },
+            // Pengaturan untuk bank transfer
+            bank_transfer: {
+                bank: 'bca',
+                va_number: '1234567890',
+                bca: {
+                    sub_company_code: '00000'
+                },
+                permata: {
+                    recipient_name: 'Toko Bunga Indah'
+                }
+            },
+            // Pengaturan untuk credit card
+            credit_card: {
+                secure: true,
+                save_card: false,
+                channel: 'migs',
+                bank: 'bca',
+                installment: {
+                    required: false,
+                    terms: {
+                        bni: [3, 6, 12],
+                        mandiri: [3, 6, 12],
+                        cimb: [3, 6],
+                        bca: [3, 6, 12],
+                        maybank: [3, 6, 12],
+                        bri: [3, 6, 12],
+                        offline: [3, 6, 12]
+                    }
+                },
+                whitelist_bins: []
+            },
+            // Callback URLs
             callbacks: {
                 finish: `${window.location.origin}/thank-you.html`,
                 error: `${window.location.origin}/payment-failed.html`,
                 pending: `${window.location.origin}/pending-payment.html`
-            },
-            enabled_payments: [paymentType],
-            credit_card: {
-                secure: true
             }
         };
 

@@ -123,5 +123,32 @@
             document.getElementById('orderId').textContent = orderId;
         }
     </script>
+
+    <!-- Cart Overlay -->
+        <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    
+        <!-- Cart Sidebar -->
+        <div id="cart-sidebar-placeholder">
+            <!-- Cart sidebar will be loaded here -->
+        </div>
+    
+        <!-- Load cart sidebar content -->
+        <script>
+            // Load cart sidebar
+            document.addEventListener('DOMContentLoaded', function() {
+                fetch('/cart-sidebar.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        const placeholder = document.getElementById('cart-sidebar-placeholder');
+                        if (placeholder) {
+                            placeholder.innerHTML = html;
+                            // Initialize cart functionality
+                            if (typeof initCart === 'function') {
+                                initCart();
+                            }
+                        }
+                    });
+            });
+        </script>
 </body>
 </html>

@@ -33,6 +33,126 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
+    <!-- Include cart sidebar -->
+    <div id="cart-sidebar-placeholder">
+        <!-- Cart sidebar will be inserted here -->
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script>
+        // Load cart sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load cart sidebar
+            fetch('/cart-sidebar.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('cart-sidebar-placeholder').innerHTML = html;
+                    // Initialize cart functionality
+                    if (typeof updateCartUI === 'function') {
+                        updateCartUI();
+                    }
+                    
+                    // Mobile menu toggle functionality
+                    // Initialize cart toggle buttons
+                    const cartToggle = document.getElementById('cart-toggle');
+                    const cartToggleMobile = document.getElementById('cart-toggle-mobile');
+                    
+                    // Load cart sidebar and initialize
+                    function initCart() {
+                        const cartSidebar = document.getElementById('cart-sidebar');
+                        const closeCartBtn = document.getElementById('close-cart');
+                        const cartOverlay = document.getElementById('cart-overlay');
+                        
+                        if (!cartSidebar || !cartOverlay) return;
+                        
+                        // Pastikan sidebar keranjang dalam keadaan tertutup saat pertama kali dimuat
+                        cartSidebar.classList.add('translate-x-full');
+                        cartSidebar.classList.remove('translate-x-0');
+                        
+                        // Inisialisasi event listeners
+                        if (cartToggle) {
+                            cartToggle.onclick = (e) => {
+                                e.preventDefault();
+                                toggleCart();
+                            };
+                        }
+                        
+                        if (cartToggleMobile) {
+                            cartToggleMobile.onclick = (e) => {
+                                e.preventDefault();
+                                toggleCart();
+                            };
+                        }
+                        
+                        if (closeCartBtn) {
+                            closeCartBtn.onclick = (e) => {
+                                e.preventDefault();
+                                closeCart();
+                            };
+                        }
+                        
+                        if (cartOverlay) {
+                            cartOverlay.onclick = (e) => {
+                                e.preventDefault();
+                                closeCart();
+                            };
+                        }
+                    }
+                    
+                    // Fungsi toggleCart yang diperbarui
+                    function toggleCart() {
+                        const cartSidebar = document.getElementById('cart-sidebar');
+                        const overlay = document.getElementById('cart-overlay');
+                        
+                        if (!cartSidebar || !overlay) return;
+                        
+                        // Toggle class untuk menampilkan/menyembunyikan keranjang
+                        const isOpen = cartSidebar.classList.toggle('translate-x-full');
+                        cartSidebar.classList.toggle('translate-x-0', !isOpen);
+                        
+                        // Tampilkan/sembunyikan overlay
+                        overlay.classList.toggle('hidden', isOpen);
+                        overlay.classList.toggle('block', !isOpen);
+                        
+                        // Atur overflow body
+                        document.body.style.overflow = !isOpen ? 'hidden' : '';
+                        
+                        // Update UI keranjang saat dibuka
+                        if (!isOpen && typeof updateCartUI === 'function') {
+                            updateCartUI();
+                        }
+                    }
+                    
+                    // Fungsi closeCart
+                    function closeCart() {
+                        const cartSidebar = document.getElementById('cart-sidebar');
+                        const overlay = document.getElementById('cart-overlay');
+                        
+                        if (cartSidebar) {
+                            cartSidebar.classList.remove('translate-x-0');
+                            cartSidebar.classList.add('translate-x-full');
+                        }
+                        
+                        if (overlay) {
+                            overlay.classList.add('hidden');
+                            overlay.classList.remove('block');
+                        }
+                        
+                        document.body.style.overflow = '';
+                    }
+                    
+                    // Panggil inisialisasi setelah cart sidebar selesai dimuat
+                    const checkCartLoaded = setInterval(() => {
+                        if (document.getElementById('cart-sidebar')) {
+                            clearInterval(checkCartLoaded);
+                            initCart();
+                        }
+                    }, 100);
+                });
+        });
+    </script>
+    
     <style>
         /* Custom styles that can't be done with Tailwind */
         .hamburger {
@@ -88,28 +208,43 @@
                 </h1>
                 
                 <!-- Desktop Navigation -->
-                <nav class="hidden md:block" aria-label="Main navigation">
+                <nav class="hidden md:flex items-center space-x-6" aria-label="Main navigation">
                     <ul class="flex space-x-6">
                         <li><a href="/" class="text-gray-600 hover:text-primary transition-colors">Beranda</a></li>
-                        <li><a href="/products" class="text-gray-600 hover:text-primary transition-colors">Produk</a></li>
-                        <li><a href="/about" class="text-gray-600 hover:text-primary transition-colors">Tentang Kami</a></li>
-                        <li><a href="/contact" class="text-primary font-medium hover:text-secondary transition-colors" aria-current="page">Kontak</a></li>
+                        <li><a href="/products.html" class="text-gray-600 hover:text-primary transition-colors">Produk</a></li>
+                        <li><a href="/about.html" class="text-gray-600 hover:text-primary transition-colors">Tentang Kami</a></li>
+                        <li><a href="/contact.html" class="text-primary font-medium hover:text-secondary transition-colors">Kontak</a></li>
                     </ul>
+                    
+                    <!-- Cart Button -->
+                    <button id="cart-toggle" class="relative p-2 text-gray-600 hover:text-primary transition-colors">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="cart-count absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    </button>
                 </nav>
                 
-                <!-- Mobile menu button -->
-                <button class="md:hidden p-2 focus:outline-none" id="mobile-menu-button" aria-label="Toggle menu" aria-expanded="false">
-                    <span class="hamburger"></span>
-                </button>
+                <!-- Mobile menu and cart -->
+                <div class="flex items-center md:hidden">
+                    <!-- Cart Button (Mobile) -->
+                    <button id="cart-toggle-mobile" class="p-2 text-gray-600 hover:text-primary transition-colors relative mr-2">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count-mobile" class="cart-count absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    </button>
+                    
+                    <!-- Mobile menu button -->
+                    <button class="p-2 focus:outline-none" id="mobile-menu-button" aria-label="Toggle menu" aria-expanded="false">
+                        <span class="hamburger"></span>
+                    </button>
+                </div>
             </div>
             
             <!-- Mobile Navigation -->
             <div class="md:hidden hidden" id="mobile-menu">
                 <nav class="px-2 pt-2 pb-4 space-y-1">
                     <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Beranda</a>
-                    <a href="/products" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Produk</a>
-                    <a href="/about" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Tentang Kami</a>
-                    <a href="/contact" class="block px-3 py-2 rounded-md text-base font-medium text-primary bg-gray-100">Kontak</a>
+                    <a href="/products.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Produk</a>
+                    <a href="/about.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Tentang Kami</a>
+                    <a href="/contact.html" class="block px-3 py-2 rounded-md text-base font-medium text-primary bg-gray-100">Kontak</a>
                 </nav>
             </div>
         </div>
@@ -286,9 +421,9 @@
                     <h4 class="text-lg font-semibold mb-4">Tautan Cepat</h4>
                     <ul class="space-y-2">
                         <li><a href="/" class="text-gray-300 hover:text-white transition-colors">Beranda</a></li>
-                        <li><a href="/products" class="text-gray-300 hover:text-white transition-colors">Produk</a></li>
-                        <li><a href="/about" class="text-gray-300 hover:text-white transition-colors">Tentang Kami</a></li>
-                        <li><a href="/contact" class="text-white font-medium">Kontak</a></li>
+                        <li><a href="/products.html" class="text-gray-300 hover:text-white transition-colors">Produk</a></li>
+                        <li><a href="/about.html" class="text-gray-300 hover:text-white transition-colors">Tentang Kami</a></li>
+                        <li><a href="/contact.html" class="text-white font-medium">Kontak</a></li>
                     </ul>
                 </div>
                 

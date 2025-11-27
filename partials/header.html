@@ -1,0 +1,53 @@
+<!-- Header -->
+<header class="bg-white shadow-md fixed w-full top-0 z-50">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-primary">
+                <a href="/" class="flex items-center">
+                    <span class="mr-2">🌸</span> FlowerShop Indah
+                </a>
+            </h1>
+            
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center space-x-6">
+                <ul class="flex space-x-6">
+                    <li><a href="/" class="text-gray-600 hover:text-primary transition-colors {{ 'text-primary font-medium' if page == 'home' }}">Beranda</a></li>
+                    <li><a href="/products.html" class="text-gray-600 hover:text-primary transition-colors {{ 'text-primary font-medium' if page == 'products' }}">Produk</a></li>
+                    <li><a href="/about.html" class="text-gray-600 hover:text-primary transition-colors {{ 'text-primary font-medium' if page == 'about' }}">Tentang Kami</a></li>
+                    <li><a href="/contact.html" class="text-gray-600 hover:text-primary transition-colors {{ 'text-primary font-medium' if page == 'contact' }}">Kontak</a></li>
+                </ul>
+                
+                <!-- Cart Button -->
+                <button id="cart-toggle" data-cart-toggle class="ml-6 relative p-2 text-gray-600 hover:text-primary transition-colors focus:outline-none">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cart-count" class="cart-count absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                </button>
+                <!-- Overlay untuk keranjang -->
+                <div id="cart-overlay" data-cart-overlay class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+            </nav>
+            
+            <!-- Mobile menu button -->
+            <div class="flex items-center md:hidden">
+                <!-- Cart Button (Mobile) -->
+                <button id="cart-toggle-mobile" data-cart-toggle-mobile class="p-2 text-gray-600 hover:text-primary transition-colors relative mr-2 focus:outline-none">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cart-count-mobile" class="cart-count absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                </button>
+                
+                <button id="mobile-menu-button" class="p-2 focus:outline-none" aria-label="Toggle menu" aria-expanded="false">
+                    <span class="hamburger"></span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div class="md:hidden hidden" id="mobile-menu">
+            <nav class="px-2 pt-2 pb-4 space-y-1">
+                <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Beranda</a>
+                <a href="/products.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Produk</a>
+                <a href="/about.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Tentang Kami</a>
+                <a href="/contact.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Kontak</a>
+            </nav>
+        </div>
+    </div>
+</header>

@@ -11,14 +11,36 @@ class Order {
       throw new Error('Email tidak valid');
     }
     
-    if (!orderData.customer_phone || !/^[0-9+ -]{10,15}$/.test(orderData.customer_phone)) {
-      throw new Error('Nomor telepon tidak valid');
+    if (!orderData.customer_phone || orderData.customer_phone.trim() === '') {
+      throw new Error('Nomor telepon harus diisi');
     }
     
     if (!orderData.items || !Array.isArray(orderData.items) || orderData.items.length === 0) {
-      throw new Error('Tidak ada item dalam pesanan');
+      throw new Error('Item pesanan harus diisi');
     }
+    
+    // Validate each item
+    for (const item of orderData.items) {
+      if (!item.product_id) {
+        throw new Error('Product ID harus diisi untuk setiap item');
+      }
+      
+      if (!item.product_name || item.product_name.trim() === '') {
+        throw new Error('Nama produk harus diisi untuk setiap item');
+      }
+      
+      if (!item.price || isNaN(item.price) || item.price <= 0) {
+        throw new Error('Harga produk tidak valid');
+      }
+      
+      if (!item.quantity || isNaN(item.quantity) || item.quantity <= 0) {
+        throw new Error('Quantity tidak valid');
+      }
+    }
+    
+    return true;
   }
+
   static async createOrder(orderData) {
     // Validate order data
     this.validateOrderData(orderData);
@@ -50,23 +72,28 @@ class Order {
         orderData.customer_email.trim(),
         orderData.customer_phone.trim(),
         totalAmount,
-        'pending'
+        orderData.status || 'pending'  // Use provided status or default to pending
       ]);
       
       const orderId = orderResult.rows[0].id;
       
       // Insert order items and update product stock
+      console.log('📦 Processing order items:', JSON.stringify(orderData.items, null, 2));
       const itemPromises = orderData.items.map(async item => {
+        console.log('🔍 Processing item:', item);
+        console.log('🔍 item.product_id:', item.product_id);
+        console.log('🔍 item.product_name:', item.product_name);
+        
         // Insert order item
         await client.query(
           'INSERT INTO order_items (order_id, product_id, product_name, quantity, price) VALUES ($1, $2, $3, $4, $5)',
-          [orderId, item.id, item.name, item.quantity, item.price]
+          [orderId, item.product_id, item.product_name, item.quantity, item.price]
         );
         
         // Update product stock
         await client.query(
           'UPDATE products SET stock = stock - $1, updated_at = NOW() WHERE id = $2',
-          [item.quantity, item.id]
+          [item.quantity, item.product_id]
         );
       });
       

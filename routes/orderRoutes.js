@@ -10,6 +10,33 @@ const snap = new midtransClient.Snap({
   clientKey: process.env.MIDTRANS_CLIENT_KEY
 });
 
+// Save order after successful payment (no Midtrans transaction needed)
+router.post('/save', async (req, res) => {
+  try {
+    console.log('📦 Save order request received:', JSON.stringify(req.body, null, 2));
+    
+    // Create order in database only
+    const order = await Order.createOrder(req.body);
+    
+    console.log('✅ Order saved to database:', order);
+    
+    // Return order success
+    res.json({
+      success: true,
+      message: 'Order saved successfully',
+      data: order
+    });
+
+  } catch (error) {
+    console.error('Order save error:', error);
+    res.status(400).json({
+      success: false,
+      message: error.message || 'Failed to save order',
+      error: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
+  }
+});
+
 // Create new order
 router.post('/', async (req, res) => {
   try {

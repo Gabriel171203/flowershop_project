@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Products - Toko Bunga</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Load cart functionality -->
+    <script src="script.js"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">🌸 Test Products Loading</h1>
+        
+        <!-- Add Cart Button for Testing -->
+        <div class="text-center mb-6">
+            <button id="cart-toggle" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                🛒 View Cart (<span id="cart-count">0</span>)
+            </button>
+        </div>
+        
+        <div id="loading" class="text-center">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <p class="mt-4 text-gray-600">Loading products...</p>
+        </div>
+        
+        <div id="error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <strong>Error:</strong> <span id="error-message"></span>
+        </div>
+        
+        <div id="products-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Products will be loaded here -->
+        </div>
+        
+        <div id="debug" class="mt-8 p-4 bg-gray-100 rounded text-sm">
+            <h3 class="font-bold mb-2">Debug Info:</h3>
+            <div id="debug-content">Loading...</div>
+        </div>
+        
+        <!-- Simple Cart UI for Testing -->
+        <div class="mt-8 p-4 bg-white rounded shadow">
+            <h3 class="font-bold mb-2">🛒 Cart Test</h3>
+            <div id="cart-items" class="mb-4">
+                <!-- Cart items will appear here -->
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="font-bold">Total:</span>
+                <span id="cart-total" class="font-bold text-xl">Rp 0</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Simple Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-80 bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50">
+        <div class="p-4 border-b">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">🛒 Your Cart</h3>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-4">
+            <div id="cart-sidebar-items" class="mb-4">
+                <!-- Cart items will appear here -->
+            </div>
+            <div class="border-t pt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="font-bold">Total:</span>
+                    <span id="cart-sidebar-total" class="font-bold text-xl">Rp 0</span>
+                </div>
+                <button id="checkout-btn" class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
+
+    <script>
+        class ProductsAPI {
+            constructor() {
+                this.baseURL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? 'http://localhost:3002/api/products'
+                    : '/api/products';
+                this.products = [];
+            }
+
+            async fetchProducts() {
+                try {
+                    console.log('🌐 Fetching from:', this.baseURL);
+                    
+                    const response = await fetch(this.baseURL);
+                    const result = await response.json();
+                    
+                    console.log('📦 Response:', result);
+                    
+                    if (result.status === 'success') {
+                        this.products = result.data;
+                        console.log('✅ Products loaded:', this.products.length);
+                        return this.products;
+                    } else {
+                        throw new Error(result.message || 'Failed to load products');
+                    }
+                } catch (error) {
+                    console.error('❌ Error:', error);
+                    throw error;
+                }
+            }
+
+            renderProducts() {
+                const container = document.getElementById('products-container');
+                const debug = document.getElementById('debug-content');
+                
+                let debugInfo = `<strong>Base URL:</strong> ${this.baseURL}<br>`;
+                debugInfo += `<strong>Products Count:</strong> ${this.products.length}<br>`;
+                debugInfo += `<strong>Products with Images:</strong> ${this.products.filter(p => p.primary_image_url).length}<br><br>`;
+                
+                container.innerHTML = '';
+                
+                if (this.products.length === 0) {
+                    container.innerHTML = '<div class="col-span-full text-center text-gray-500">No products found</div>';
+                    debugInfo += '<strong>Status:</strong> No products';
+                    debug.innerHTML = debugInfo;
+                    return;
+                }
+                
+                this.products.forEach((product, index) => {
+                    const imageUrl = product.primary_image_url || 'https://placehold.co/300x200';
+                    const allImages = product.images || [];
+                    const price = new Intl.NumberFormat('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR'
+                    }).format(product.price);
+                    
+                    debugInfo += `<strong>Product ${index + 1}:</strong> ${product.name}<br>`;
+                    debugInfo += `  - Primary Image: ${imageUrl}<br>`;
+                    debugInfo += `  - Total Images: ${allImages.length}<br>`;
+                    debugInfo += `  - All Images: ${allImages.map(img => img.cloudinary_url).join(', ')}<br>`;
+                    debugInfo += `  - Category: ${product.category}<br>`;
+                    debugInfo += `  - Price: ${price}<br><br>`;
+                    
+                    // Create thumbnail gallery
+                    let thumbnailsHtml = '';
+                    if (allImages.length > 1) {
+                        thumbnailsHtml = `
+                            <div class="flex gap-1 mt-2 overflow-x-auto">
+                                ${allImages.map((img, idx) => `
+                                    <img src="${img.cloudinary_url}" 
+                                         alt="${img.alt_text}" 
+                                         class="w-16 h-16 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity border-2 ${idx === 0 ? 'border-blue-500' : 'border-gray-200'}"
+                                         onclick="document.getElementById('main-image-${product.id}').src='${img.cloudinary_url}'"
+                                         loading="lazy">
+                                `).join('')}
+                            </div>
+                        `;
+                    }
+                    
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-lg shadow-md overflow-hidden';
+                    card.innerHTML = `
+                        <img id="main-image-${product.id}" src="${imageUrl}" alt="${product.name}" class="w-full h-48 object-cover" onerror="this.src='https://placehold.co/300x200?text=Image+Error'">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg">${product.name}</h3>
+                            <p class="text-gray-600 text-sm">${product.category}</p>
+                            <p class="text-xl font-bold text-blue-600">${price}</p>
+                            ${allImages.length > 1 ? `
+                                <div class="mt-2 text-sm text-gray-500">
+                                    <i class="fas fa-images mr-1"></i>${allImages.length} photos available
+                                </div>
+                            ` : ''}
+                            ${thumbnailsHtml}
+                            <button class="add-to-cart mt-4 w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+                                    data-id="${product.id}"
+                                    data-name="${product.name}"
+                                    data-price="${parseFloat(product.price) || 0}"
+                                    data-category="${product.category}"
+                                    data-image="${imageUrl}">
+                                🛒 Add to Cart
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+                
+                debug.innerHTML = debugInfo;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            const api = new ProductsAPI();
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            
+            try {
+                loading.classList.remove('hidden');
+                error.classList.add('hidden');
+                
+                await api.fetchProducts();
+                api.renderProducts();
+                
+                loading.classList.add('hidden');
+                
+                // Debug cart functionality
+                console.log('🛒 Cart Debug Info:');
+                console.log('- addToCart function exists:', typeof addToCart);
+                console.log('- formatRupiah function exists:', typeof formatRupiah);
+                
+                // Test formatRupiah
+                if (typeof formatRupiah === 'function') {
+                    console.log('- formatRupiah test:', formatRupiah(250000));
+                }
+                
+                // Check current cart
+                const currentCart = JSON.parse(localStorage.getItem('cart') || '[]');
+                console.log('- Current cart items:', currentCart.length);
+                currentCart.forEach((item, index) => {
+                    console.log(`  ${index + 1}. ${item.name} - ${item.price} (${typeof item.price})`);
+                });
+                
+                // Test cart functionality
+                if (typeof addToCart === 'function') {
+                    console.log('🧪 Testing cart with sample product...');
+                    const testResult = addToCart('test-1', 'Test Product', 250000, 'Test', 'test.jpg');
+                    console.log('Test add result:', testResult);
+                    
+                    // Check cart after test
+                    const updatedCart = JSON.parse(localStorage.getItem('cart') || '[]');
+                    console.log('Cart after test:', updatedCart.length, 'items');
+                    
+                    if (updatedCart.length > 0) {
+                        const testItem = updatedCart[0];
+                        console.log('Test item details:', {
+                            name: testItem.name,
+                            price: testItem.price,
+                            priceType: typeof testItem.price,
+                            formattedPrice: typeof formatRupiah === 'function' ? formatRupiah(testItem.price) : 'N/A'
+                        });
+                    }
+                }
+                
+            } catch (error) {
+                loading.classList.add('hidden');
+                error.classList.remove('hidden');
+                document.getElementById('error-message').textContent = error.message;
+                document.getElementById('debug-content').innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

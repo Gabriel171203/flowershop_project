@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const cors = require('cors');
 const midtransClient = require('midtrans-client');
 const db = require('./config/db');
@@ -32,7 +33,14 @@ console.log(`- Midtrans Client Key: ${process.env.MIDTRANS_CLIENT_KEY ? '***' + 
 app.use(cors({
   origin: [
     'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'http://localhost:3003',
     'http://127.0.0.1:5500',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3001',
+    'http://127.0.0.1:3002',
+    'http://127.0.0.1:3003',
     'https://app.sandbox.midtrans.com',
     'https://app.midtrans.com',
     'http://localhost:8000',
@@ -50,6 +58,19 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Serve static files from the root directory
 app.use(express.static(__dirname));
+
+// Serve images from local file system
+app.get('/images/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const imagePath = path.join(__dirname, filename);
+  
+  // Check if file exists
+  if (fs.existsSync(imagePath)) {
+    res.sendFile(imagePath);
+  } else {
+    res.status(404).send('Image not found');
+  }
+});
 
 // Attach database to request object
 app.use((req, res, next) => {
@@ -73,9 +94,11 @@ app.use((req, res, next) => {
 
 // Import routes
 const orderRoutes = require('./routes/orderRoutes');
+const productRoutes = require('./routes/productRoutes');
 
 // API Routes
 app.use('/api/orders', orderRoutes);
+app.use('/api/products', productRoutes);
 
 // Deprecated payment token endpoint (kept for backward compatibility)
 app.post('/api/payment/token', async (req, res) => {

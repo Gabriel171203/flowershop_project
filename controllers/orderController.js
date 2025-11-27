@@ -16,6 +16,8 @@ if (process.env.NODE_ENV !== 'test') {
 
 // Buat pesanan baru
 exports.createOrder = async (req, res) => {
+  console.log('📦 Order request received:', JSON.stringify(req.body, null, 2));
+  
   const client = await db.getClient();
   
   try {
@@ -25,11 +27,28 @@ exports.createOrder = async (req, res) => {
       customer_phone, 
       items, 
       shipping_address,
-      notes 
+      notes,
+      payment_method,
+      delivery_date,
+      delivery_time,
+      payment_result
     } = req.body;
+
+    console.log('🔍 Extracted data:', {
+      customer_name,
+      customer_email,
+      customer_phone,
+      items_count: items?.length,
+      shipping_address,
+      payment_method,
+      delivery_date,
+      delivery_time,
+      payment_result_status: payment_result?.status_code
+    });
 
     // Validasi input
     if (!customer_name || !customer_email || !customer_phone || !items || !Array.isArray(items) || items.length === 0) {
+      console.log('❌ Validation failed:', { customer_name: !!customer_name, customer_email: !!customer_email, customer_phone: !!customer_phone, items: !!items, items_length: items?.length });
       return res.status(400).json({ error: 'Data pelanggan dan item pesanan harus diisi' });
     }
 

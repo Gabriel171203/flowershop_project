@@ -27,20 +27,30 @@ async function runMigrations() {
     
     console.log('🚀 Memulai migrasi database...');
     
-    // Baca file migrasi
-    const migrationPath = path.join(__dirname, '../db/migrations/001_initial_schema.sql');
+    // Path ke folder migrations
+    const migrationsDir = path.join(__dirname, '../db/migrations');
     
-    if (!fs.existsSync(migrationPath)) {
-      throw new Error(`File migrasi tidak ditemukan di ${migrationPath}`);
+    // Baca semua file migrasi dan urutkan
+    const migrationFiles = fs.readdirSync(migrationsDir)
+      .filter(file => file.endsWith('.sql'))
+      .sort(); // Mengurutkan berdasarkan nama file
+    
+    console.log(`📁 Ditemukan ${migrationFiles.length} file migrasi`);
+    
+    for (const file of migrationFiles) {
+      const filePath = path.join(migrationsDir, file);
+      console.log(`📄 Menjalankan migrasi: ${file}`);
+      
+      const migrationSQL = fs.readFileSync(filePath, 'utf8');
+      
+      // Jalankan migrasi
+      await client.query(migrationSQL);
+      
+      console.log(`✅ Migrasi ${file} berhasil`);
     }
     
-    const migrationSQL = fs.readFileSync(migrationPath, 'utf8');
-    
-    // Jalankan migrasi
-    await client.query(migrationSQL);
-    
     await client.query('COMMIT');
-    console.log('✅ Migrasi berhasil dijalankan');
+    console.log('🎉 Semua migrasi berhasil dijalankan');
     
   } catch (error) {
     await client.query('ROLLBACK');

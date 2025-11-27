@@ -8,6 +8,9 @@
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Midtrans Snap.js -->
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-g9fa2aqU80sPCmuC"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -91,28 +94,43 @@
                 </h1>
                 
                 <!-- Desktop Navigation -->
-                <nav class="hidden md:block" aria-label="Main navigation">
+                <nav class="hidden md:flex items-center space-x-6" aria-label="Main navigation">
                     <ul class="flex space-x-6">
                         <li><a href="/" class="text-primary font-medium hover:text-secondary transition-colors">Beranda</a></li>
-                        <li><a href="/products" class="text-gray-600 hover:text-primary transition-colors">Produk</a></li>
-                        <li><a href="/about" class="text-gray-600 hover:text-primary transition-colors">Tentang Kami</a></li>
-                        <li><a href="/contact" class="text-gray-600 hover:text-primary transition-colors">Kontak</a></li>
+                        <li><a href="/products.html" class="text-gray-600 hover:text-primary transition-colors">Produk</a></li>
+                        <li><a href="/about.html" class="text-gray-600 hover:text-primary transition-colors">Tentang Kami</a></li>
+                        <li><a href="/contact.html" class="text-gray-600 hover:text-primary transition-colors">Kontak</a></li>
                     </ul>
+                    
+                    <!-- Cart Button -->
+                    <button id="cart-toggle" class="relative p-2 text-gray-600 hover:text-primary transition-colors">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="cart-count absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    </button>
                 </nav>
                 
-                <!-- Mobile menu button -->
-                <button class="md:hidden p-2 focus:outline-none" id="mobile-menu-button" aria-label="Toggle menu" aria-expanded="false">
-                    <span class="hamburger"></span>
-                </button>
+                <!-- Mobile menu and cart -->
+                <div class="flex items-center md:hidden">
+                    <!-- Cart Button (Mobile) -->
+                    <button id="cart-toggle-mobile" class="p-2 text-gray-600 hover:text-primary transition-colors relative mr-2">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count-mobile" class="cart-count absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    </button>
+                    
+                    <!-- Mobile menu button -->
+                    <button class="p-2 focus:outline-none" id="mobile-menu-button" aria-label="Toggle menu" aria-expanded="false">
+                        <span class="hamburger"></span>
+                    </button>
+                </div>
             </div>
             
             <!-- Mobile Navigation -->
             <div class="md:hidden hidden" id="mobile-menu">
                 <nav class="px-2 pt-2 pb-4 space-y-1">
                     <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-primary bg-gray-100">Beranda</a>
-                    <a href="/products" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Produk</a>
-                    <a href="/about" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Tentang Kami</a>
-                    <a href="/contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Kontak</a>
+                    <a href="/products.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Produk</a>
+                    <a href="/about.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Tentang Kami</a>
+                    <a href="/contact.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50">Kontak</a>
                 </nav>
             </div>
         </div>
@@ -139,35 +157,98 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Product 1 -->
-                    <article class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-                        <img src="/buket.jpg" alt="Buket Bunga Mawar Merah" class="w-full h-64 object-cover">
+                    <article class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                        <div class="relative">
+                            <img src="/buket.jpg" alt="Buket Bunga Mawar Merah" class="w-full h-64 object-cover">
+                            <div class="absolute top-4 right-4 bg-accent text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                Best Seller
+                            </div>
+                        </div>
                         <div class="p-6">
                             <h3 class="text-xl font-semibold text-secondary mb-2">Buket Mawar Merah</h3>
-                            <p class="text-accent font-bold text-lg mb-3">Rp 250.000</p>
+                            <div class="flex items-center mb-3">
+                                <div class="flex items-center text-yellow-500">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span class="text-gray-600 text-sm ml-1">(4.8)</span>
+                                </div>
+                            </div>
                             <p class="text-gray-600 mb-4">Buket cantik berisi 12 tangkai mawar merah segar dengan kemasan eksklusif.</p>
-                            <a href="#" class="inline-block w-full text-center bg-primary hover:bg-secondary text-white font-medium py-2 px-4 rounded transition-colors">Beli Sekarang</a>
+                            <div class="flex items-center mb-4 text-sm text-gray-500">
+                                <i class="fas fa-truck mr-2"></i>
+                                <span>Gratis Pengiriman</span>
+                            </div>
+                            <a href="products.html" class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg block text-center">
+                                <i class="fas fa-eye mr-2"></i>
+                                Lihat Detail
+                            </a>
                         </div>
                     </article>
 
                     <!-- Product 2 -->
-                    <article class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-                        <img src="/bungasingle.jpg" alt="Bunga Matahari" class="w-full h-64 object-cover">
+                    <article class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                        <div class="relative">
+                            <img src="/bungasingle.jpg" alt="Bunga Matahari" class="w-full h-64 object-cover">
+                            <div class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                New
+                            </div>
+                        </div>
                         <div class="p-6">
                             <h3 class="text-xl font-semibold text-secondary mb-2">Bunga Matahari</h3>
-                            <p class="text-accent font-bold text-lg mb-3">Rp 150.000</p>
+                            <div class="flex items-center mb-3">
+                                <div class="flex items-center text-yellow-500">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="text-gray-600 text-sm ml-1">(4.2)</span>
+                                </div>
+                            </div>
                             <p class="text-gray-600 mb-4">Bunga matahari segar yang cerah, cocok untuk hadiah ulang tahun atau ucapan selamat.</p>
-                            <a href="#" class="inline-block w-full text-center bg-primary hover:bg-secondary text-white font-medium py-2 px-4 rounded transition-colors">Beli Sekarang</a>
+                            <div class="flex items-center mb-4 text-sm text-gray-500">
+                                <i class="fas fa-leaf mr-2"></i>
+                                <span>100% Fresh</span>
+                            </div>
+                            <a href="products.html" class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg block text-center">
+                                <i class="fas fa-eye mr-2"></i>
+                                Lihat Detail
+                            </a>
                         </div>
                     </article>
 
                     <!-- Product 3 -->
-                    <article class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-                        <img src="/buket2.jpg" alt="Buket Bunga Campur" class="w-full h-64 object-cover">
+                    <article class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                        <div class="relative">
+                            <img src="/buket2.jpg" alt="Buket Bunga Campur" class="w-full h-64 object-cover">
+                            <div class="absolute top-4 right-4 bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                Premium
+                            </div>
+                        </div>
                         <div class="p-6">
                             <h3 class="text-xl font-semibold text-secondary mb-2">Buket Bunga Campur</h3>
-                            <p class="text-accent font-bold text-lg mb-3">Rp 300.000</p>
+                            <div class="flex items-center mb-3">
+                                <div class="flex items-center text-yellow-500">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span class="text-gray-600 text-sm ml-1">(5.0)</span>
+                                </div>
+                            </div>
                             <p class="text-gray-600 mb-4">Perpaduan berbagai jenis bunga segar yang disusun apik oleh florist profesional.</p>
-                            <a href="#" class="inline-block w-full text-center bg-primary hover:bg-secondary text-white font-medium py-2 px-4 rounded transition-colors">Beli Sekarang</a>
+                            <div class="flex items-center mb-4 text-sm text-gray-500">
+                                <i class="fas fa-award mr-2"></i>
+                                <span>Kualitas Terbaik</span>
+                            </div>
+                            <a href="products.html" class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg block text-center">
+                                <i class="fas fa-eye mr-2"></i>
+                                Lihat Detail
+                            </a>
                         </div>
                     </article>
                 </div>
@@ -208,6 +289,7 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="script.js"></script>
     <script>
         // Mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -257,5 +339,156 @@
             });
         });
     </script>
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" data-cart-overlay></div>
+    
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold">Checkout</h3>
+                        <div class="flex items-center mt-1">
+                            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                            <span class="text-sm text-green-600">Sandbox Mode</span>
+                        </div>
+                    </div>
+                    <button id="close-checkout-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="mb-4">
+                    <h4 class="font-semibold mb-2">Order Summary</h4>
+                    <div id="checkout-items" class="space-y-2 mb-4">
+                        <!-- Cart items will be populated here -->
+                    </div>
+                    <div class="border-t pt-2">
+                        <div class="flex justify-between font-bold">
+                            <span>Total:</span>
+                            <span id="checkout-total">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Methods Info -->
+                <div class="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <h4 class="font-semibold text-blue-900 mb-2">
+                        <i class="fas fa-info-circle mr-2"></i>Metode Pembayaran Tersedia
+                    </h4>
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div class="flex items-center">
+                            <i class="fas fa-credit-card text-blue-600 mr-2"></i>
+                            <span class="text-blue-800">Kartu Kredit</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-university text-blue-600 mr-2"></i>
+                            <span class="text-blue-800">BCA VA</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-mobile-alt text-blue-600 mr-2"></i>
+                            <span class="text-blue-800">GoPay</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-shopping-bag text-blue-600 mr-2"></i>
+                            <span class="text-blue-800">ShopeePay</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-wallet text-blue-600 mr-2"></i>
+                            <span class="text-blue-800">OVO</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-qrcode text-blue-600 mr-2"></i>
+                            <span class="text-blue-800">QRIS</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-xs text-blue-700">
+                        <strong>Test Sandbox:</strong> Gunakan data test untuk simulasi pembayaran
+                    </div>
+                </div>
+                
+                <form id="checkout-form">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1">Nama Lengkap</label>
+                        <input type="text" id="customer-name" class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="John Doe" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1">Email</label>
+                        <input type="email" id="customer-email" class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="john@example.com" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1">No. HP</label>
+                        <input type="tel" id="customer-phone" class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="08123456789" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1">Alamat Pengiriman</label>
+                        <textarea id="customer-address" class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="3" placeholder="Jl. Contoh No. 123, Jakarta" required></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1">Tanggal Pengiriman</label>
+                        <input type="date" id="delivery-date" class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1">Waktu Pengiriman</label>
+                        <select id="delivery-time" class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="">Pilih waktu</option>
+                            <option value="09:00-12:00">09:00 - 12:00</option>
+                            <option value="12:00-15:00">12:00 - 15:00</option>
+                            <option value="15:00-18:00">15:00 - 18:00</option>
+                            <option value="18:00-21:00">18:00 - 21:00</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Sandbox Test Info -->
+                    <div class="mb-4 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                        <div class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-yellow-600 mt-1 mr-2"></i>
+                            <div class="text-sm text-yellow-800">
+                                <strong>Mode Testing:</strong> Ini adalah environment sandbox. 
+                                Gunakan data test untuk simulasi pembayaran.
+                                <div class="mt-1 text-xs">
+                                    CC: 4811 1111 1111 1114 (CVV: 123)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                        <i class="fas fa-lock mr-2"></i>
+                        Bayar dengan Midtrans
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-96 bg-white shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto">
+        <div class="p-4">
+            <div class="flex justify-between items-center border-b pb-4 mb-4">
+                <h3 class="text-xl font-bold">Keranjang Belanja</h3>
+                <button id="close-cart" data-close-cart class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="cart-items">
+                <!-- Items will be loaded here -->
+                <div class="text-center py-8 text-gray-500">
+                    <i class="fas fa-shopping-cart text-4xl mb-2 opacity-30"></i>
+                    <p>Keranjang belanja Anda kosong</p>
+                </div>
+            </div>
+            <div class="border-t pt-4 mt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="font-semibold">Total:</span>
+                    <span id="cart-total" class="font-bold text-lg text-primary">Rp 0</span>
+                </div>
+                <button id="checkout-btn" class="checkout-btn w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Lanjut ke Pembayaran
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

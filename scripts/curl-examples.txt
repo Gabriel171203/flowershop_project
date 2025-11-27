@@ -1,0 +1,19 @@
+const db = require('../config/db');
+
+// Simple price update via cURL examples
+console.log('💰 Cara Update Harga via API/CURL');
+console.log('=====================================\n');
+
+console.log('1. Update harga produk tunggal:');
+console.log('curl -X PUT http://localhost:3002/api/products/21 \\');
+console.log('  -H "Content-Type: application/json" \\');
+console.log('  -d \'{"price": 275000, "name": "Bouquet Bunga Mawar", "description": "Bouquet indah terdiri dari mawar merah segar dengan wrapping premium", "stock": 50, "category": "Bouquet"}\'\n');
+
+console.log('2. Lihat harga setelah update:');
+console.log('curl http://localhost:3002/api/products/21 | jq \'.data | {name, price}\'\n');
+
+console.log('3. Lihat semua produk dan harga:');
+console.log('curl http://localhost:3002/api/products | jq \'.data[] | {id, name, price}\'\n');
+
+console.log('4. Format harga dalam Rupiah:');
+console.log('curl http://localhost:3002/api/products | jq \'.data[] | {name, price: ("Rp " + (.price | tonumber | tostring | .[0:-3]) + "." + (.price | tonumber | tostring | .[-3:]))}\'\n');
