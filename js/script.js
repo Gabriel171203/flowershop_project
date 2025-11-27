@@ -1702,7 +1702,7 @@ async function processMidtransPayment(orderData) {
         console.log('📋 Transaction data:', transactionData);
         
         // Get Snap Token from backend
-        const response = await fetch('http://localhost:3002/api/payment/token', {
+        const response = await fetch('/api/payment/token.js', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
