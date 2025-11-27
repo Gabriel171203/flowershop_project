@@ -1602,7 +1602,7 @@ async function saveOrderToDatabase(paymentResult) {
         console.log('📤 Sending order data:', JSON.stringify(orderData, null, 2));
         
         // Send to backend
-        const response = await fetch(`/api/orders/save`, {
+        const response = await fetch(`/api/orders/save.js`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
