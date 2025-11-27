@@ -137,7 +137,7 @@ export class PaymentService {
             let data;
             
             try {
-                response = await fetch('/api/payment/token', {
+                response = await fetch('/api/payment/token.js', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

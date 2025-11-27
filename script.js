@@ -1602,7 +1602,7 @@ async function saveOrderToDatabase(paymentResult) {
         console.log('📤 Sending order data:', JSON.stringify(orderData, null, 2));
         
         // Send to backend
-        const response = await fetch(`/api/orders/save`, {
+        const response = await fetch(`/api/orders/save.js`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1702,7 +1702,7 @@ async function processMidtransPayment(orderData) {
         console.log('📋 Transaction data:', transactionData);
         
         // Get Snap Token from backend
-        const response = await fetch('http://localhost:3002/api/payment/token', {
+        const response = await fetch('/api/payment/token.js', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

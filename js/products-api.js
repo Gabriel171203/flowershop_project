@@ -6,7 +6,7 @@ class ProductsAPI {
     constructor() {
         this.baseURL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? `http://${window.location.hostname}:${window.location.port}/api/products`  // Development server
-            : '/api/products';  // Production (same domain)
+            : '/api/products.js';  // Production (same domain)
         this.products = [];
         this.isLoading = false;
     }
