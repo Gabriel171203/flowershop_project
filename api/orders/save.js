@@ -57,23 +57,25 @@ module.exports = async function handler(req, res) {
       const result = await query(`
         INSERT INTO orders (
           customer_name, customer_email, customer_phone, 
-          delivery_address, delivery_date, delivery_time,
-          items, total_amount, payment_method, status,
-          payment_result, created_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
+          shipping_address, total_amount, payment_status,
+          payment_data, created_at, order_number
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), $8)
         RETURNING *
       `, [
         orderData.customer_name,
         orderData.customer_email,
         orderData.customer_phone,
-        orderData.delivery_address,
-        orderData.delivery_date,
-        orderData.delivery_time,
-        JSON.stringify(orderData.items),
-        orderData.total_amount,
-        orderData.payment_method,
+        orderData.shipping_address,
+        orderData.items?.reduce((sum, item) => sum + (item.price * item.quantity), 0) || 0,
         orderData.status || 'pending',
-        JSON.stringify(orderData.payment_result || {})
+        JSON.stringify({
+          payment_method: orderData.payment_method,
+          delivery_date: orderData.delivery_date,
+          delivery_time: orderData.delivery_time,
+          items: orderData.items,
+          payment_result: orderData.payment_result
+        }),
+        `ORDER-${Date.now()}`
       ]);
 
       const savedOrder = result.rows[0];
