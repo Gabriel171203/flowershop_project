@@ -190,7 +190,7 @@ class ProductsAPI {
                         <i class="fas fa-shopping-cart"></i>
                         <span>Tambah ke Keranjang</span>
                     </button>
-                </div>
+                </div>  
             </div>
         `;
 
