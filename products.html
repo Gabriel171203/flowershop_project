@@ -9,13 +9,22 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Midtrans Snap.js -->
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" 
-            data-client-key="SB-Mid-client-g9fa2aqU80sPCmuC" 
-            crossorigin="anonymous"
-            async>
-    </script>
+    <!-- Midtrans Snap.js - Try without crossorigin first -->
     <script>
+    // Load Midtrans script using JSONP approach to avoid CORS
+    (function() {
+        const script = document.createElement('script');
+        script.src = 'https://app.sandbox.midtrans.com/snap/snap.js?data-client-key=SB-Mid-client-g9fa2aqU80sPCmuC';
+        script.async = true;
+        script.onerror = function() {
+            console.error('❌ Failed to load Midtrans script');
+        };
+        script.onload = function() {
+            console.log('✅ Midtrans script loaded');
+        };
+        document.head.appendChild(script);
+    })();
+    
     // Function to check if Midtrans is ready
     function waitForMidtrans(timeout = 5000) {
         return new Promise((resolve, reject) => {
