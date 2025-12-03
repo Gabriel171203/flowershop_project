@@ -344,6 +344,28 @@ function submitOrder(event) {
                 // Clear cart
                 localStorage.removeItem('cart');
                 updateCartCount();
+                try {
+                    // 1. First, ensure the Midtrans script is loaded
+                    try {
+                        console.log('Loading Midtrans script...');
+                        await loadMidtransScript();
+                        console.log('Midtrans script loaded successfully');
+                    } catch (error) {
+                        console.error('Failed to load Midtrans script:', error);
+                        throw new Error('Gagal memuat sistem pembayaran. Silakan refresh halaman dan coba lagi.');
+                    }
+                    // 2. Initialize Snap.js with the token
+                    console.log('Initializing Snap payment...');
+                    
+                    // Double-check that snap is available
+                    if (!window.snap || typeof window.snap.pay !== 'function') {
+                        console.error('window.snap is not available:', window.snap);
+                        throw new Error('Sistem pembayaran belum siap. Silakan refresh halaman dan coba lagi.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showAlert(error.message || 'Terjadi kesalahan', 'error');
+                }
                 // Redirect to thank you page
                 window.location.href = '/thank-you.html';
             }
@@ -924,14 +946,11 @@ function setupCartToggle(button) {
         return true;
     }
     return false;
-}
-
-// Load products from API
 async function loadProducts() {
     try {
         console.log('🔄 Loading products from API...');
         
-        const response = await fetch(`/api/products`);
+        const response = await fetch('/api/products.js');
         const result = await response.json();
         
         console.log('📥 API Response:', result);
@@ -1660,6 +1679,16 @@ async function processMidtransPayment(orderData) {
         const originalText = checkoutBtn.innerHTML;
         checkoutBtn.disabled = true;
         checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Memproses...';
+        
+        // 1. First, ensure the Midtrans script is loaded
+        try {
+            console.log('Loading Midtrans script...');
+            await loadMidtransScript();
+            console.log('✅ Midtrans script loaded successfully');
+        } catch (error) {
+            console.error('❌ Failed to load Midtrans script:', error);
+            throw new Error('Gagal memuat sistem pembayaran. Silakan refresh halaman dan coba lagi.');
+        }
         
         // Create transaction data for Midtrans
         const transactionData = {

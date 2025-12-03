@@ -9,8 +9,52 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Midtrans Snap.js -->
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-g9fa2aqU80sPCmuC"></script>
+    <!-- Midtrans Snap.js will be loaded dynamically -->
+    <script>
+    // Function to load Midtrans script with retry logic
+    function loadMidtransScript(retryCount = 0) {
+        if (window.snap) return Promise.resolve();
+        
+        return new Promise((resolve, reject) => {
+            if (retryCount >= 3) {
+                return reject(new Error('Failed to load Midtrans script after multiple attempts'));
+            }
+            
+            const script = document.createElement('script');
+            script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
+            script.setAttribute('data-client-key', 'SB-Mid-client-g9fa2aqU80sPCmuC');
+            script.setAttribute('crossorigin', 'anonymous');
+            script.async = true;
+            script.defer = true;
+            
+            script.onload = () => {
+                console.log('Midtrans script loaded, checking for window.snap...');
+                if (window.snap && typeof window.snap.pay === 'function') {
+                    console.log('✅ Midtrans Snap is ready');
+                    resolve();
+                } else {
+                    console.log('⏳ Script loaded but window.snap not ready, retrying...');
+                    setTimeout(() => loadMidtransScript(retryCount + 1), 1000 * (retryCount + 1))
+                        .then(resolve)
+                        .catch(reject);
+                }
+            };
+            
+            script.onerror = (error) => {
+                console.error(`❌ Failed to load Midtrans script (attempt ${retryCount + 1}):`, error);
+                if (retryCount < 2) {
+                    setTimeout(() => loadMidtransScript(retryCount + 1), 1000 * (retryCount + 1))
+                        .then(resolve)
+                        .catch(reject);
+                } else {
+                    reject(new Error('Failed to load Midtrans script after 3 attempts'));
+                }
+            };
+            
+            document.head.appendChild(script);
+        });
+    }
+    </script>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
