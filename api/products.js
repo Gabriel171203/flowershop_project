@@ -21,25 +21,40 @@ module.exports = async function handler(req, res) {
       
       // Query products from database
       const result = await db.query(`
-        SELECT p.*, 
-               json_agg(
-                 json_build_object(
-                   'id', ci.id,
-                   'cloudinary_url', ci.cloudinary_url,
-                   'is_primary', ci.is_primary
-                 ) ORDER BY ci.is_primary DESC
-               ) as images
+        SELECT 
+          p.*,
+          COALESCE(
+            json_agg(
+              json_build_object(
+                'id', i.id,
+                'url', i.cloudinary_url,
+                'is_primary', i.is_primary
+              ) 
+              ORDER BY i.is_primary DESC
+              NULLS LAST
+            ) FILTER (WHERE i.id IS NOT NULL),
+            '[]'::json
+          ) as images
         FROM products p
-        LEFT JOIN images ci ON p.id = ci.product_id
+        LEFT JOIN images i ON p.id = i.product_id
         GROUP BY p.id
         ORDER BY p.created_at DESC
       `);
 
       const products = result.rows.map(product => {
-        // Format images array
-        const images = product.images && product.images[0] && product.images[0].id 
-          ? product.images.filter(img => img.cloudinary_url).map(img => img.cloudinary_url)
+        // Ensure images is an array and handle both URL formats
+        const images = Array.isArray(product.images) 
+          ? product.images
+              .filter(img => img && (img.url || img.cloudinary_url))
+              .map(img => ({
+                id: img.id,
+                url: img.url || img.cloudinary_url,
+                is_primary: img.is_primary || false
+              }))
           : [];
+
+        // Find primary image or use first available
+        const primaryImage = images.find(img => img.is_primary) || images[0];
 
         return {
           id: product.id,
