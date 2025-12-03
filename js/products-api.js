@@ -109,7 +109,7 @@ class ProductsAPI {
         card.setAttribute('data-price', parseFloat(product.price) || 0);
 
         // Get primary image URL - prioritize Cloudinary URL
-        const imageUrl = product.primary_image_url || product.image_url || 'https://placehold.co/300x300/ffffff/e5e5e5.png?text=No+Image';
+        const imageUrl = product.primary_image || product.primary_image_url || product.image_url || 'https://placehold.co/300x300/ffffff/e5e5e5.png?text=No+Image';
         const altText = product.primary_image_alt || `Gambar ${product.name}`;
         
         // Get all images for gallery
