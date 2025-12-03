@@ -152,33 +152,35 @@ class ProductsAPI {
                     </button>
                 </div>
             </div>
-            <div class="p-4 flex flex-col flex-1">
-                <div class="mb-2">
-                    <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">${product.category || 'Uncategorized'}</span>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">${product.name}</h3>
-                <p class="text-gray-600 text-sm mb-4 line-clamp-2">${product.description || 'Deskripsi produk tidak tersedia'}</p>
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-xl font-bold text-primary">${formattedPrice}</span>
-                    <div class="flex items-center text-sm text-gray-500">
-                        <i class="fas fa-box mr-1"></i>
-                        <span>Stok: ${product.stock || 0}</span>
+            <div class="p-4 flex flex-col h-full">
+                <div class="flex-grow">
+                    <div class="mb-2">
+                        <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">${product.category || 'Uncategorized'}</span>
                     </div>
-                </div>
-                ${hasMultipleImages ? `
-                    <div class="mb-4">
-                        <div class="flex gap-1 overflow-x-auto">
-                            ${allImages.map((img, index) => `
-                                <img src="${img.url || img.cloudinary_url}" 
-                                     alt="${img.alt_text || `Gambar ${index + 1}`}" 
-                                     class="w-12 h-12 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
-                                     onclick="this.parentElement.parentElement.parentElement.querySelector('.relative img').src='${img.url || img.cloudinary_url}'"
-                                     loading="lazy">
-                            `).join('')}
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">${product.name}</h3>
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">${product.description || 'Deskripsi produk tidak tersedia'}</p>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xl font-bold text-primary">${formattedPrice}</span>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <i class="fas fa-box mr-1"></i>
+                            <span>Stok: ${product.stock || 0}</span>
                         </div>
                     </div>
-                ` : ''}
-                <div class="product-actions bg-white border-t border-gray-100 p-3 mt-auto">
+                    ${hasMultipleImages ? `
+                        <div class="mb-4">
+                            <div class="flex gap-1 overflow-x-auto">
+                                ${allImages.map((img, index) => `
+                                    <img src="${img.url || img.cloudinary_url}" 
+                                         alt="${img.alt_text || `Gambar ${index + 1}`}" 
+                                         class="w-12 h-12 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
+                                         onclick="this.parentElement.parentElement.parentElement.querySelector('.relative img').src='${img.url || img.cloudinary_url}'"
+                                         loading="lazy">
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="product-actions bg-white border-t border-gray-100 p-3 -m-4 mt-4">
                     <button class="add-to-cart w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-secondary transition-colors duration-200 font-medium text-sm flex items-center justify-center gap-2" 
                             data-product-id="${product.id}" 
                             data-product-name="${product.name}" 
