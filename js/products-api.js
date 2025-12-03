@@ -138,9 +138,10 @@ class ProductsAPI {
         card.innerHTML = `
             <div class="relative overflow-hidden group">
                 <img src="${imageUrl}" alt="${altText}" class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                ${product.is_new ? `
                 <div class="absolute top-2 left-2">
                     <span class="bg-accent text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">Baru</span>
-                </div>
+                </div>` : ''}
                 ${imageGalleryHtml}
                 <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
                     <button class="quick-view bg-white rounded-full w-10 h-10 flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors" aria-label="Lihat detail" data-product-id="${product.id}">
@@ -168,10 +169,10 @@ class ProductsAPI {
                     <div class="mb-4">
                         <div class="flex gap-1 overflow-x-auto">
                             ${allImages.map((img, index) => `
-                                <img src="${img.cloudinary_url}" 
-                                     alt="${img.alt_text}" 
+                                <img src="${img.url || img.cloudinary_url}" 
+                                     alt="${img.alt_text || `Gambar ${index + 1}`}" 
                                      class="w-12 h-12 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
-                                     onclick="this.parentElement.parentElement.parentElement.querySelector('.relative img').src='${img.cloudinary_url}'"
+                                     onclick="this.parentElement.parentElement.parentElement.querySelector('.relative img').src='${img.url || img.cloudinary_url}'"
                                      loading="lazy">
                             `).join('')}
                         </div>
