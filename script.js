@@ -957,47 +957,6 @@ async function loadProducts() {
     }
 }
 
-// Render products to grid
-function renderProducts(products) {
-    const productsGrid = document.querySelector('.grid.grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-3.xl\\:grid-cols-4');
-    
-    if (!productsGrid) {
-        console.error('❌ Products grid not found');
-        return;
-    }
-    
-    productsGrid.innerHTML = products.map(product => `
-        <div class="product-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300" data-id="${product.id}" data-price="${product.price}">
-            <div class="product-image relative">
-                <img src="${product.primary_image_url || '/placeholder-image.png'}" alt="${product.name}" class="w-full h-48 object-cover">
-                <div class="product-badges absolute top-2 left-2">
-                    <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">Best Seller</span>
-                </div>
-            </div>
-            <div class="p-4">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">${product.name}</h3>
-                <p class="text-gray-600 text-sm mb-3">${product.description}</p>
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-xl font-bold text-primary">Rp ${parseInt(product.price).toLocaleString('id-ID')}</span>
-                    <span class="text-sm text-gray-500">Stok: ${product.stock}</span>
-                </div>
-                <div class="product-actions">
-                    <button class="add-to-cart-btn w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-secondary transition-colors duration-300" 
-                            data-id="${product.id}" 
-                            data-name="${product.name}" 
-                            data-price="${product.price}"
-                            data-category="${product.category || 'Bunga'}">
-                        <i class="fas fa-shopping-cart mr-2"></i>Tambah ke Keranjang
-                    </button>
-                </div>
-            </div>
-        </div>
-    `).join('');
-    
-    // Setup add to cart buttons for new products
-    setupAddToCartButtons();
-}
-
 // Initialize everything when DOM is ready
 function initializeApp() {
     console.log('🚀 Initializing application...');
