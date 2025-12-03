@@ -178,7 +178,7 @@ class ProductsAPI {
                         </div>
                     </div>
                 ` : ''}
-                <div class="product-actions bg-white border-t border-gray-100 p-3 -m-4 transform translate-y-full opacity-0 invisible transition-all duration-300">
+                <div class="product-actions bg-white border-t border-gray-100 p-3 mt-auto">
                     <button class="add-to-cart w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-secondary transition-colors duration-200 font-medium text-sm flex items-center justify-center gap-2" 
                             data-product-id="${product.id}" 
                             data-product-name="${product.name}" 
