@@ -41,31 +41,52 @@ module.exports = async function handler(req, res) {
         ORDER BY p.created_at DESC
       `);
 
+      // Set CORS headers
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Content-Type', 'application/json');
+      
       const products = result.rows.map(product => {
-        // Ensure images is an array and handle both URL formats
-        const images = Array.isArray(product.images) 
-          ? product.images
-              .filter(img => img && (img.url || img.cloudinary_url))
-              .map(img => ({
-                id: img.id,
-                url: img.url || img.cloudinary_url,
-                is_primary: img.is_primary || false
-              }))
-          : [];
+        try {
+          // Ensure images is an array and handle both URL formats
+          const images = Array.isArray(product.images) 
+            ? product.images
+                .filter(img => img && (img.url || img.cloudinary_url))
+                .map(img => ({
+                  id: img.id,
+                  url: img.url || img.cloudinary_url,
+                  is_primary: img.is_primary || false
+                }))
+            : [];
 
-        // Find primary image or use first available
-        const primaryImage = images.find(img => img.is_primary) || images[0];
+          // Find primary image or use first available
+          const primaryImage = images.find(img => img.is_primary) || images[0];
+          
+          // Debug log
+          console.log(`🖼️ Product ${product.name}:`, {
+            hasImages: images.length > 0,
+            primaryImage: primaryImage?.url || 'No primary image',
+            allImages: images.map(i => i.url || i.cloudinary_url)
+          });
 
-        return {
-          id: product.id,
-          name: product.name,
-          description: product.description,
-          price: parseFloat(product.price),
-          images: images,
-          primary_image: images[0] || null,
-          category: product.category || 'Bunga',
-          stock: product.stock || 10
-        };
+          return {
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            price: parseFloat(product.price),
+            images: images,
+            primary_image: primaryImage?.url || null,
+            category: product.category || 'Bunga',
+            stock: product.stock || 10
+          };
+        } catch (error) {
+          console.error(`❌ Error processing product ${product.id}:`, error);
+          return {
+            ...product,
+            images: [],
+            primary_image: null,
+            error: 'Error processing product data'
+          };
+        }
       });
 
       console.log(`✅ Found ${products.length} products with images`);
