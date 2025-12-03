@@ -289,7 +289,7 @@ function getCartItems() {
  * Handle order form submission
  * @param {Event} event - Form submission event
  */
-function submitOrder(event) {
+async function submitOrder(event) {
     event.preventDefault();
     
     const form = event.target;
@@ -324,56 +324,45 @@ function submitOrder(event) {
         }
         
         // Submit order to backend
-        fetch('/api/orders', {
+        const response = await fetch('/api/orders/save.js', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                throw new Error(data.message || 'Gagal memproses pesanan');
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.message || 'Gagal memproses pesanan');
+        }
+        
+        // Redirect to payment page or thank you page
+        if (data.payment_url) {
+            window.location.href = data.payment_url;
+        } else {
+            // Clear cart
+            localStorage.removeItem('cart');
+            updateCartCount();
+            
+            // 1. First, ensure the Midtrans script is loaded
+            console.log('Loading Midtrans script...');
+            await loadMidtransScript();
+            console.log('Midtrans script loaded successfully');
+            
+            // 2. Initialize Snap.js with the token
+            console.log('Initializing Snap payment...');
+            
+            // Double-check that snap is available
+            if (!window.snap || typeof window.snap.pay !== 'function') {
+                console.error('window.snap is not available:', window.snap);
+                throw new Error('Sistem pembayaran belum siap. Silakan refresh halaman dan coba lagi.');
             }
             
-            // Redirect to payment page or thank you page
-            if (data.payment_url) {
-                window.location.href = data.payment_url;
-            } else {
-                // Clear cart
-                localStorage.removeItem('cart');
-                updateCartCount();
-                try {
-                    // 1. First, ensure the Midtrans script is loaded
-                    try {
-                        console.log('Loading Midtrans script...');
-                        await loadMidtransScript();
-                        console.log('Midtrans script loaded successfully');
-                    } catch (error) {
-                        console.error('Failed to load Midtrans script:', error);
-                        throw new Error('Gagal memuat sistem pembayaran. Silakan refresh halaman dan coba lagi.');
-                    }
-                    // 2. Initialize Snap.js with the token
-                    console.log('Initializing Snap payment...');
-                    
-                    // Double-check that snap is available
-                    if (!window.snap || typeof window.snap.pay !== 'function') {
-                        console.error('window.snap is not available:', window.snap);
-                        throw new Error('Sistem pembayaran belum siap. Silakan refresh halaman dan coba lagi.');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    showAlert(error.message || 'Terjadi kesalahan', 'error');
-                }
-                // Redirect to thank you page
-                window.location.href = '/thank-you.html';
-            }
-        })
-        .catch(error => {
-            console.error('Order submission error:', error);
-            showAlert(error.message || 'Terjadi kesalahan saat memproses pesanan', 'error');
-        });
+            // Redirect to thank you page
+            window.location.href = '/thank-you.html';
+        }
         
     } catch (error) {
         console.error('Error:', error);
@@ -946,6 +935,8 @@ function setupCartToggle(button) {
         return true;
     }
     return false;
+}
+
 async function loadProducts() {
     try {
         console.log('🔄 Loading products from API...');
@@ -1747,7 +1738,32 @@ async function processMidtransPayment(orderData) {
         console.log('✅ Snap token received:', result);
         
         if (result.token) {
+            // Ensure window.snap is available before calling pay
+            if (!window.snap || typeof window.snap.pay !== 'function') {
+                console.error('❌ window.snap is not available:', window.snap);
+                // Try to load the script one more time
+                try {
+                    console.log('🔄 Attempting to reload Midtrans script...');
+                    await loadMidtransScript();
+                    
+                    // Wait a bit for the script to initialize
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    if (!window.snap || typeof window.snap.pay !== 'function') {
+                        throw new Error('Sistem pembayaran gagal dimuat. Silakan refresh halaman dan coba lagi.');
+                    }
+                } catch (error) {
+                    console.error('❌ Failed to reload Midtrans script:', error);
+                    throw new Error('Sistem pembayaran belum siap. Silakan refresh halaman dan coba lagi.');
+                }
+            }
+            
             // Open Midtrans Snap popup
+            console.log('🔍 Before calling window.snap.pay:');
+            console.log('- window.snap exists:', !!window.snap);
+            console.log('- window.snap.pay type:', typeof window.snap?.pay);
+            console.log('- result.token:', result.token);
+            
             window.snap.pay(result.token, {
                 onSuccess: async function(result) {
                     console.log('✅ Payment successful:', result);
@@ -1789,13 +1805,21 @@ async function processMidtransPayment(orderData) {
                     }
                     
                     showAlert(errorMessage, 'error');
-                    checkoutBtn.disabled = false;
-                    checkoutBtn.innerHTML = originalText;
+                    // Reset button state
+                    const btn = document.getElementById('checkout-btn');
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = originalText;
+                    }
                 },
                 onClose: function() {
                     console.log('🚪 Payment popup closed');
-                    checkoutBtn.disabled = false;
-                    checkoutBtn.innerHTML = originalText;
+                    // Reset button state
+                    const btn = document.getElementById('checkout-btn');
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = originalText;
+                    }
                 }
             });
         } else {

@@ -1,7 +1,13 @@
 // Load environment variables
 require('dotenv').config();
 
-const db = require('../config/db');
+// Direct database configuration for Vercel
+const { Pool } = require('pg');
+
+const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+});
 
 // Vercel serverless function handler
 module.exports = async function handler(req, res) {
