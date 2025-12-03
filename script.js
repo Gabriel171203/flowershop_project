@@ -948,7 +948,7 @@ async function loadProducts() {
         
         if (result.status === 'success' && result.data) {
             console.log('✅ Products loaded:', result.data.length, 'items');
-            renderProducts(result.data);
+            // Products will be rendered by ProductsAPI class
         } else {
             console.error('❌ Failed to load products:', result);
         }
