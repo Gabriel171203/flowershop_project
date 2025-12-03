@@ -288,30 +288,17 @@
         }
 
         .product-actions {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
             display: flex;
             flex-direction: column;
             gap: 8px;
             padding: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            transform: translateY(100%);
-            transition: all 0.3s ease;
+            background: white;
+            border-top: 1px solid #e5e7eb;
             justify-content: center;
-            opacity: 0;
-            visibility: hidden;
             width: 100%;
             box-sizing: border-box;
         }
         
-        .product-card:hover .product-actions {
-            transform: translateY(0);
-            opacity: 1;
-            visibility: visible;
-        }
-
         .add-to-cart {
             background: var(--primary-color);
             color: white;
