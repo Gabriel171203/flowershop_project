@@ -1764,6 +1764,17 @@ async function processMidtransPayment(orderData) {
             console.log('- window.snap.pay type:', typeof window.snap?.pay);
             console.log('- result.token:', result.token);
             
+            // Additional check and wait for snap to be ready
+            if (!window.snap || typeof window.snap.pay !== 'function') {
+                console.log('⏳ Snap not ready, waiting...');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                if (!window.snap || typeof window.snap.pay !== 'function') {
+                    console.error('❌ Snap still not ready after wait:', window.snap);
+                    throw new Error('Sistem pembayaran gagal dimuat. Silakan refresh halaman dan coba lagi.');
+                }
+            }
+            
             window.snap.pay(result.token, {
                 onSuccess: async function(result) {
                     console.log('✅ Payment successful:', result);
