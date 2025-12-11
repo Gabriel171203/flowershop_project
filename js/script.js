@@ -505,9 +505,6 @@ function showCheckoutModal() {
         
         console.log('✅ Modal checkout ditampilkan dengan sukses');
         
-        // Close cart if open
-        closeCart();
-        
         // Set minimum delivery date to tomorrow
         const deliveryDate = document.getElementById('delivery-date');
         if (deliveryDate) {

@@ -137,7 +137,7 @@ export class PaymentService {
             let data;
             
             try {
-                response = await fetch('/api/payment/token.js', {
+                response = await fetch('/api/payment/token', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -176,37 +176,44 @@ export class PaymentService {
             }
             
             // Initialize payment with Snap
-            if (window.snap && data.token) {
-                console.log('Initializing Snap payment with token:', data.token);
-                
-                return new Promise((resolve, reject) => {
-                    window.snap.pay(data.token, {
-                        onSuccess: (result) => {
-                            console.log('Payment success:', result);
-                            if (data.redirect_url) {
-                                window.location.href = data.redirect_url;
-                            }
-                            resolve({ success: true, result });
-                        },
-                        onPending: (result) => {
-                            console.log('Payment pending:', result);
-                            if (data.redirect_url) {
-                                window.location.href = data.redirect_url;
-                            }
-                        },
-                        onError: (error) => {
-                            console.error('Payment error:', error);
-                            if (data.error_url) {
-                                window.location.href = data.error_url;
-                            }
-                            reject(new Error('Payment was not completed'));
-                        },
-                        onClose: () => {
-                            console.log('Payment popup closed');
-                            reject(new Error('Payment popup was closed'));
-                        }
-                    });
+            if (data.token || data.redirect_url) {
+                console.log('Payment token/URL received:', { 
+                    hasToken: !!data.token, 
+                    hasRedirect: !!data.redirect_url 
                 });
+
+                // If we have a redirect URL, use it
+                if (data.redirect_url) {
+                    console.log('Redirecting to payment page:', data.redirect_url);
+                    window.location.href = data.redirect_url;
+                    return { success: true, redirect: data.redirect_url };
+                }
+                
+                // Otherwise, use Snap.js if available
+                if (window.snap && data.token) {
+                    console.log('Initializing Snap payment with token:', data.token);
+                    
+                    return new Promise((resolve, reject) => {
+                        window.snap.pay(data.token, {
+                            onSuccess: (result) => {
+                                console.log('Payment success:', result);
+                                resolve({ success: true, result });
+                            },
+                            onPending: (result) => {
+                                console.log('Payment pending:', result);
+                                resolve({ pending: true, result });
+                            },
+                            onError: (error) => {
+                                console.error('Payment error:', error);
+                                reject(new Error(error.message || 'Payment was not completed'));
+                            },
+                            onClose: () => {
+                                console.log('Payment popup closed by user');
+                                reject(new Error('Payment popup was closed'));
+                            }
+                        });
+                    });
+                }
             } else {
                 throw new Error('Failed to initialize payment: Missing token or Snap not loaded');
             }

@@ -175,23 +175,44 @@ async function handlePayment(product, paymentType) {
         console.log('Memproses pembayaran...');
 
         try {
+            console.log('Processing payment with order:', order);
+            
             // Panggil paymentService untuk memproses pembayaran
             const paymentResult = await paymentService.processPayment(order);
             
-            console.log('Payment result:', paymentResult);
+            console.log('Payment processing result:', paymentResult);
             
-            // Jika berhasil, arahkan ke halaman sukses
+            // Handle payment result
             if (paymentResult && paymentResult.redirect_url) {
+                console.log('Redirecting to payment page:', paymentResult.redirect_url);
                 window.location.href = paymentResult.redirect_url;
-            } else if (paymentResult && paymentResult.token) {
-                // Jika menggunakan Snap, redirect_url akan dihandle oleh Snap
-                console.log('Payment token generated, opening payment gateway...');
-            } else {
-                throw new Error('Tidak dapat memproses pembayaran. Silakan coba lagi.');
+                return;
             }
+            
+            if (paymentResult && paymentResult.success) {
+                console.log('Payment processed successfully:', paymentResult);
+                // Redirect to thank you page or show success message
+                window.location.href = '/thank-you.html';
+                return;
+            }
+            
+            throw new Error('Tidak dapat memproses pembayaran. Silakan coba lagi.');
         } catch (error) {
             console.error('Error during payment processing:', error);
-            throw new Error(`Gagal memproses pembayaran: ${error.message || 'Silakan coba lagi'}`);
+            // Show user-friendly error message
+            const errorMessage = error.message || 'Gagal memproses pembayaran';
+            showNotification(errorMessage, 'error');
+            
+            // Log detailed error for debugging
+            if (error.response) {
+                console.error('Error response:', error.response);
+                if (error.response.data) {
+                    console.error('Error details:', error.response.data);
+                }
+            }
+            
+            // Rethrow the error to be caught by the outer catch block
+            throw new Error(errorMessage);
         } finally {
             // Pastikan loading indicator selalu disembunyikan
             const loadingOverlay = document.getElementById('loading-overlay');

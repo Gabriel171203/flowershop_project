@@ -1805,8 +1805,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadCustomerData();
 });
         checkoutBtn.innerHTML = 'Bayar Sekarang';
-    }
-}
+   
 
 // ============================================
 // INITIALIZE APPLICATION
