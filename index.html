@@ -8,14 +8,19 @@
     
     <!-- Content Security Policy - Permissive settings for Midtrans -->
     <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self';
-                  script-src 'self' 'unsafe-eval' 'unsafe-inline' https: http:;
-                  style-src 'self' 'unsafe-inline' https:;
-                  img-src 'self' data: https: http:;
-                  font-src 'self' https: data:;
-                  frame-src 'self' https://app.sandbox.midtrans.com https://app.midtrans.com https://*.midtrans.com *;
-                  connect-src 'self' https://api.sandbox.midtrans.com https://api.midtrans.com https://*.midtrans.com *;
-                  form-action 'self' https://app.sandbox.midtrans.com https://app.midtrans.com;">
+          content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http:;
+                  script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http: *;
+                  style-src 'self' 'unsafe-inline' data: blob: https: http:;
+                  img-src 'self' data: blob: https: http:;
+                  font-src 'self' data: blob: https: http:;
+                  connect-src 'self' data: blob: https: http: ws: wss: *;
+                  frame-src 'self' data: blob: https: http: *;
+                  frame-ancestors 'self' data: blob: https: http: *;
+                  form-action 'self' data: blob: https: http: *;
+                  media-src 'self' data: blob: https: http:;
+                  object-src 'self' data: blob: https: http:;
+                  manifest-src 'self' data: blob: https: http:;
+                  worker-src 'self' data: blob: https: http: blob:;">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>

@@ -57,17 +57,24 @@ app.use(cors(corsOptions));
 
 // Add CSP middleware with more permissive settings for Midtrans
 app.use((req, res, next) => {
-  res.setHeader(
-    'Content-Security-Policy',
-    "default-src 'self';" +
-    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https: http:;" +
-    "style-src 'self' 'unsafe-inline' https:;" +
-    "img-src 'self' data: https: http:;" +
-    "font-src 'self' https: data:;" +
-    "frame-src 'self' https://app.sandbox.midtrans.com https://app.midtrans.com https://*.midtrans.com *;" +
-    "connect-src 'self' https://api.sandbox.midtrans.com https://api.midtrans.com https://*.midtrans.com *;" +
-    "form-action 'self' https://app.sandbox.midtrans.com https://app.midtrans.com;"
-  );
+  const csp = [
+    "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http:;",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http: *;",
+    "style-src 'self' 'unsafe-inline' data: blob: https: http:;",
+    "img-src 'self' data: blob: https: http:;",
+    "font-src 'self' data: blob: https: http:;",
+    "connect-src 'self' data: blob: https: http: ws: wss: *;",
+    "frame-src 'self' data: blob: https: http: *;",
+    "frame-ancestors 'self' data: blob: https: http: *;",
+    "form-action 'self' data: blob: https: http: *;",
+    "media-src 'self' data: blob: https: http:;",
+    "object-src 'self' data: blob: https: http:;",
+    "manifest-src 'self' data: blob: https: http:;",
+    "worker-src 'self' data: blob: https: http: blob:;"
+  ].join('; ');
+  
+  res.setHeader('Content-Security-Policy', csp);
+  res.setHeader('X-Content-Security-Policy', csp); // For IE
   next();
 });
 
