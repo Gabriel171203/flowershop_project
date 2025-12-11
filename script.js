@@ -730,13 +730,7 @@ function initCheckoutModal() {
         }
     });
     
-    // Form submission
-    if (checkoutForm) {
-        checkoutForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await handleCheckoutSubmit(e);
-        });
-    }
+    // Form submission handled by processCheckout function
     
     // Close modal when clicking outside
     if (overlay) {
@@ -1375,14 +1369,7 @@ function setupCheckoutButton() {
         console.log(`🔧 Tombol ${index + 1} disabled:`, shouldBeDisabled);
     });
     
-    // Setup checkout form
-    const checkoutForm = document.getElementById('checkout-form');
-    if (checkoutForm) {
-        checkoutForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            processCheckout();
-        });
-    }
+    // Form submission handled by handleCheckoutSubmit in initCheckoutModal
     
     console.log('✅ Semua tombol checkout telah diatur');
 }
@@ -1619,28 +1606,79 @@ function getEnabledPayments(method) {
     */
 }
 
+// Load Midtrans script dynamically
+function loadMidtransScript() {
+    return new Promise((resolve, reject) => {
+        // Check if already loaded
+        if (window.snap && typeof window.snap.pay === 'function') {
+            console.log('✅ Midtrans script already loaded');
+            return resolve();
+        }
+
+        // Check if script is already being loaded
+        if (document.querySelector('script[src*="midtrans"], script[src*="snap"], script[data-client-key]')) {
+            console.log('🔄 Midtrans script already loading, waiting...');
+            let attempts = 0;
+            const checkSnap = setInterval(() => {
+                attempts++;
+                if (window.snap && typeof window.snap.pay === 'function') {
+                    clearInterval(checkSnap);
+                    console.log('✅ Midtrans script loaded successfully after waiting');
+                    resolve();
+                } else if (attempts > 10) { // Wait max 5 seconds (10 attempts * 500ms)
+                    clearInterval(checkSnap);
+                    reject(new Error('Timeout waiting for Midtrans script to load'));
+                }
+            }, 500);
+            return;
+        }
+
+        // Create and load the script
+        const script = document.createElement('script');
+        script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
+        script.setAttribute('data-client-key', 'SB-Mid-client-g9fa2aqU80sPCmuC');
+        script.async = true;
+        script.onload = () => {
+            console.log('✅ Midtrans script loaded successfully');
+            // Sometimes snap isn't immediately available after onload
+            setTimeout(() => {
+                if (window.snap && typeof window.snap.pay === 'function') {
+                    resolve();
+                } else {
+                    reject(new Error('Midtrans script loaded but snap.pay is not available'));
+                }
+            }, 500);
+        };
+        script.onerror = (error) => {
+            console.error('❌ Failed to load Midtrans script:', error);
+            reject(new Error('Gagal memuat sistem pembayaran'));
+        };
+        document.head.appendChild(script);
+    });
+}
+
 // Process Midtrans Payment
 async function processMidtransPayment(orderData) {
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const originalText = checkoutBtn.innerHTML;
+    
     try {
         console.log('🔄 Initiating Midtrans payment...');
         
         // Show loading
-        const checkoutBtn = document.getElementById('checkout-btn');
-        const originalText = checkoutBtn.innerHTML;
         checkoutBtn.disabled = true;
         checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Memproses...';
         
-        // 1. First, ensure the Midtrans script is loaded
+        // 1. Ensure Midtrans script is loaded
         try {
             console.log('Loading Midtrans script...');
             await loadMidtransScript();
-            console.log('✅ Midtrans script loaded successfully');
         } catch (error) {
             console.error('❌ Failed to load Midtrans script:', error);
             throw new Error('Gagal memuat sistem pembayaran. Silakan refresh halaman dan coba lagi.');
         }
         
-        // Create transaction data for Midtrans
+        // 2. Prepare transaction data
         const transactionData = {
             transaction_details: {
                 order_id: 'ORDER-' + Date.now(),
@@ -1648,12 +1686,12 @@ async function processMidtransPayment(orderData) {
             },
             customer_details: {
                 first_name: orderData.customer.name.split(' ')[0],
-                last_name: orderData.customer.name.split(' ').slice(1).join(' '),
+                last_name: orderData.customer.name.split(' ').slice(1).join(' ') || 'Customer',
                 email: orderData.customer.email,
                 phone: orderData.customer.phone,
                 billing_address: {
                     first_name: orderData.customer.name.split(' ')[0],
-                    last_name: orderData.customer.name.split(' ').slice(1).join(' '),
+                    last_name: orderData.customer.name.split(' ').slice(1).join(' ') || 'Customer',
                     address: orderData.customer.address,
                     city: 'Jakarta',
                     postal_code: '12345',
@@ -1672,137 +1710,100 @@ async function processMidtransPayment(orderData) {
                 delivery_time: orderData.delivery.time,
                 payment_method: orderData.payment.method
             },
-            // Enable payments based on selected method
             enabled_payments: getEnabledPayments(orderData.payment.method)
         };
         
         console.log('💳 Transaction data:', transactionData);
         
-        console.log('📋 Transaction data:', transactionData);
-        
-        // Get Snap Token from backend
+        // 3. Get Snap Token from backend
         const response = await fetch('/api/payment/token.js', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(transactionData)
         });
         
         if (!response.ok) {
-            throw new Error('Failed to get payment token');
+            const error = await response.text();
+            console.error('❌ Failed to get payment token:', error);
+            throw new Error('Gagal memproses pembayaran. Silakan coba lagi.');
         }
         
         const result = await response.json();
         console.log('✅ Snap token received:', result);
         
-        if (result.token) {
-            // Ensure window.snap is available before calling pay
-            if (!window.snap || typeof window.snap.pay !== 'function') {
-                console.error('❌ window.snap is not available:', window.snap);
-                // Try to load the script one more time
-                try {
-                    console.log('🔄 Attempting to reload Midtrans script...');
-                    await loadMidtransScript();
-                    
-                    // Wait a bit for the script to initialize
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    
-                    if (!window.snap || typeof window.snap.pay !== 'function') {
-                        throw new Error('Sistem pembayaran gagal dimuat. Silakan refresh halaman dan coba lagi.');
-                    }
-                } catch (error) {
-                    console.error('❌ Failed to reload Midtrans script:', error);
-                    throw new Error('Sistem pembayaran belum siap. Silakan refresh halaman dan coba lagi.');
-                }
-            }
-            
-            // Open Midtrans Snap popup
-            console.log('🔍 Before calling window.snap.pay:');
-            console.log('- window.snap exists:', !!window.snap);
-            console.log('- window.snap.pay type:', typeof window.snap?.pay);
-            console.log('- result.token:', result.token);
-            
-            // Additional check and wait for snap to be ready
-            if (!window.snap || typeof window.snap.pay !== 'function') {
-                console.log('⏳ Snap not ready, waiting...');
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                if (!window.snap || typeof window.snap.pay !== 'function') {
-                    console.error('❌ Snap still not ready after wait:', window.snap);
-                    throw new Error('Sistem pembayaran gagal dimuat. Silakan refresh halaman dan coba lagi.');
-                }
-            }
-            
-            window.snap.pay(result.token, {
-                onSuccess: async function(result) {
-                    console.log('✅ Payment successful:', result);
-                    console.log('🛒 Cart status BEFORE save:', cart.length, 'items');
-                    console.log('🛒 Cart data:', JSON.stringify(cart, null, 2));
-                    
-                    showAlert('🎉 Pembayaran berhasil! Terima kasih atas pesanan Anda.', 'success');
-                    
-                    // Save order to backend database FIRST
-                    await saveOrderToDatabase(result);
-                    
-                    // Clear cart and close modal AFTER save is complete
-                    cart = [];
-                    saveCart();
-                    updateCartUI();
-                    hideCheckoutModal();
-                    closeCart();
-                },
-                onPending: function(result) {
-                    console.log('⏳ Payment pending:', result);
-                    showAlert('⏳ Pembayaran dalam proses. Silakan lanjutkan pembayaran.', 'info');
-                },
-                onError: function(result) {
-                    console.log('❌ Payment error:', result);
-                    
-                    // Better error messages based on error type
-                    let errorMessage = '❌ Pembayaran gagal. Silakan coba lagi.';
-                    
-                    if (result && result.status_message) {
-                        if (result.status_message.includes('declined')) {
-                            errorMessage = '❌ Pembayaran ditolak bank. Gunakan kartu test: 4811 1111 1111 1114';
-                        } else if (result.status_message.includes('expired')) {
-                            errorMessage = '❌ Kartu kadaluarsa. Gunakan kartu test dengan expiry 12/25';
-                        } else if (result.status_message.includes('invalid')) {
-                            errorMessage = '❌ Data kartu tidak valid. Periksa kembali nomor kartu dan CVV';
-                        } else {
-                            errorMessage = `❌ ${result.status_message}`;
-                        }
-                    }
-                    
-                    showAlert(errorMessage, 'error');
-                    // Reset button state
-                    const btn = document.getElementById('checkout-btn');
-                    if (btn) {
-                        btn.disabled = false;
-                        btn.innerHTML = originalText;
-                    }
-                },
-                onClose: function() {
-                    console.log('🚪 Payment popup closed');
-                    // Reset button state
-                    const btn = document.getElementById('checkout-btn');
-                    if (btn) {
-                        btn.disabled = false;
-                        btn.innerHTML = originalText;
-                    }
-                }
-            });
-        } else {
-            throw new Error('No token received');
+        if (!result.token) {
+            throw new Error('Token pembayaran tidak valid');
         }
         
-    } catch (error) {
-        console.error('❌ Payment error:', error);
-        showAlert(`Terjadi kesalahan: ${error.message}`, 'error');
+        // 4. Show payment popup
+        console.log('🔄 Opening payment popup...');
         
-        // Reset button
-        const checkoutBtn = document.getElementById('checkout-btn');
+        // Ensure snap is available
+        if (!window.snap || typeof window.snap.pay !== 'function') {
+            throw new Error('Sistem pembayaran tidak tersedia. Silakan refresh halaman.');
+        }
+        
+        // Open payment popup
+        window.snap.pay(result.token, {
+            onSuccess: function(result) {
+                console.log('✅ Payment success:', result);
+                showAlert('Pembayaran berhasil!', 'success');
+                // Clear cart on success
+                cart = [];
+                saveCart();
+                updateCartUI();
+                // Redirect to thank you page or show success message
+                window.location.href = '/thank-you.html';
+            },
+            onPending: function(result) {
+                console.log('� Payment pending:', result);
+                showAlert('Menunggu konfirmasi pembayaran', 'info');
+                // You might want to handle pending payments differently
+                window.location.href = '/pending-payment.html';
+            },
+            onError: function(error) {
+                console.error('❌ Payment error:', error);
+                showAlert('Pembayaran gagal: ' + (error.message || 'Terjadi kesalahan'), 'error');
+                checkoutBtn.disabled = false;
+                checkoutBtn.innerHTML = originalText;
+            },
+            onClose: function() {
+                console.log('ℹ️ Payment popup was closed');
+                checkoutBtn.disabled = false;
+                checkoutBtn.innerHTML = originalText;
+            }
+        });
+        
+    } catch (error) {
+        console.error('❌ Payment processing error:', error);
+        showAlert('Gagal memproses pembayaran: ' + error.message, 'error');
         checkoutBtn.disabled = false;
+        checkoutBtn.innerHTML = originalText;
+    }
+}
+
+// Initialize the application when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Application initialized');
+    
+    // Initialize cart and other components
+    initCart();
+    
+    // Set up event listeners
+    const checkoutForm = document.getElementById('checkout-form');
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', handleCheckoutSubmit);
+    }
+    
+    // Initialize checkout modal
+    initCheckoutModal();
+    
+    // Set up checkout button
+    setupCheckoutButton();
+    
+    // Load any saved customer data
+    loadCustomerData();
+});
         checkoutBtn.innerHTML = 'Bayar Sekarang';
     }
 }
