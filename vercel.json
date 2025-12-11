@@ -11,7 +11,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http: *; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http: data: blob: *; style-src 'self' 'unsafe-inline' https: http: data: blob: *; img-src 'self' https: http: data: blob: *; font-src 'self' https: http: data: blob: *; connect-src 'self' https: http: data: blob: ws: wss: *; frame-src 'self' https: http: data: blob: *; frame-ancestors 'self' https: http: data: blob: *; form-action 'self' https: http: data: blob: *; media-src 'self' https: http: data: blob: *; object-src 'self' https: http: data: blob: *; manifest-src 'self' https: http: data: blob: *; worker-src 'self' https: http: data: blob: blob:;"
+          "value": "default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http: data: blob: *; style-src 'self' 'unsafe-inline' https: http: data: blob: *; img-src 'self' https: http: data: blob: *; font-src 'self' https: http: data: blob: *; connect-src 'self' https: http: data: blob: ws: wss: *; frame-src 'self' https: http: data: blob: *; form-action 'self' https: http: data: blob: *; media-src 'self' https: http: data: blob: *; object-src 'self' https: http: data: blob: *; manifest-src 'self' https: http: data: blob: *; worker-src 'self' https: http: data: blob: blob:;"
         }
       ]
     }
