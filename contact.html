@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Content Security Policy - Permissive settings for Midtrans -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self';
+                  script-src 'self' 'unsafe-eval' 'unsafe-inline' https: http:;
+                  style-src 'self' 'unsafe-inline' https:;
+                  img-src 'self' data: https: http:;
+                  font-src 'self' https: data:;
+                  frame-src 'self' https://app.sandbox.midtrans.com https://app.midtrans.com https://*.midtrans.com *;
+                  connect-src 'self' https://api.sandbox.midtrans.com https://api.midtrans.com https://*.midtrans.com *;
+                  form-action 'self' https://app.sandbox.midtrans.com https://app.midtrans.com;">
     <meta name="description" content="Hubungi FlowerShop Indah untuk pemesanan bunga dan informasi lebih lanjut">
     <title>Kontak Kami - FlowerShop Indah</title>
     

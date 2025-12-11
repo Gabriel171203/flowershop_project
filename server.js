@@ -55,17 +55,17 @@ const corsOptions = {
 // Apply CORS middleware
 app.use(cors(corsOptions));
 
-// Add CSP middleware
+// Add CSP middleware with more permissive settings for Midtrans
 app.use((req, res, next) => {
   res.setHeader(
     'Content-Security-Policy',
     "default-src 'self';" +
-    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://app.sandbox.midtrans.com https://app.midtrans.com https://*.midtrans.com https://*.vercel.app *.vercel.app 'unsafe-hashes';" +
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;" +
+    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https: http:;" +
+    "style-src 'self' 'unsafe-inline' https:;" +
     "img-src 'self' data: https: http:;" +
-    "font-src 'self' https://fonts.gstatic.com data:;" +
-    "frame-src 'self' https://app.sandbox.midtrans.com https://app.midtrans.com https://*.midtrans.com *.vercel.app;" +
-    "connect-src 'self' https://api.sandbox.midtrans.com https://api.midtrans.com https://*.midtrans.com *.vercel.app;" +
+    "font-src 'self' https: data:;" +
+    "frame-src 'self' https://app.sandbox.midtrans.com https://app.midtrans.com https://*.midtrans.com *;" +
+    "connect-src 'self' https://api.sandbox.midtrans.com https://api.midtrans.com https://*.midtrans.com *;" +
     "form-action 'self' https://app.sandbox.midtrans.com https://app.midtrans.com;"
   );
   next();
