@@ -1422,26 +1422,23 @@ function processCheckout() {
     let deliveryDate = document.getElementById('delivery-date').value;
     const deliveryTime = document.getElementById('delivery-time').value;
     
-    // Remove auto-fill to preserve user input
-    // Validation: ensure required fields are filled
+    // Auto-fill empty fields with test data for demo
     if (!name) {
-        showAlert('Nama lengkap harus diisi', 'error');
-        return false;
+        const nameInput = document.getElementById('customer-name');
+        nameInput.value = 'Test Customer';
+        console.log('🔧 Auto-filled name: Test Customer');
     }
     
     if (!email) {
-        showAlert('Email harus diisi', 'error');
-        return false;
+        const emailInput = document.getElementById('customer-email');
+        emailInput.value = 'test@example.com';
+        console.log('🔧 Auto-filled email: test@example.com');
     }
     
     if (!phone) {
-        showAlert('Nomor telepon harus diisi', 'error');
-        return false;
-    }
-    
-    if (!address) {
-        showAlert('Alamat pengiriman harus diisi', 'error');
-        return false;
+        const phoneInput = document.getElementById('customer-phone');
+        phoneInput.value = '08123456789';
+        console.log('🔧 Auto-filled phone: 08123456789');
     }
     
     // Set default delivery date to tomorrow if not set
