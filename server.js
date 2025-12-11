@@ -29,8 +29,8 @@ console.log(`- Database: ${process.env.DATABASE_URL ? 'Configured' : 'Not Config
 console.log(`- Midtrans Server Key: ${process.env.MIDTRANS_SERVER_KEY ? '***' + process.env.MIDTRANS_SERVER_KEY.slice(-4) : 'Tidak ada'}`);
 console.log(`- Midtrans Client Key: ${process.env.MIDTRANS_CLIENT_KEY ? '***' + process.env.MIDTRANS_CLIENT_KEY.slice(-4) : 'Tidak ada'}\n`);
 
-// Middleware
-app.use(cors({
+// CORS configuration
+const corsOptions = {
   origin: [
     'http://localhost:3000',
     'http://localhost:3001',
@@ -50,7 +50,26 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: true
-}));
+};
+
+// Apply CORS middleware
+app.use(cors(corsOptions));
+
+// Add CSP middleware
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self';" +
+    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://app.sandbox.midtrans.com https://app.midtrans.com https://*.midtrans.com https://*.vercel.app *.vercel.app 'unsafe-hashes';" +
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;" +
+    "img-src 'self' data: https: http:;" +
+    "font-src 'self' https://fonts.gstatic.com data:;" +
+    "frame-src 'self' https://app.sandbox.midtrans.com https://app.midtrans.com https://*.midtrans.com *.vercel.app;" +
+    "connect-src 'self' https://api.sandbox.midtrans.com https://api.midtrans.com https://*.midtrans.com *.vercel.app;" +
+    "form-action 'self' https://app.sandbox.midtrans.com https://app.midtrans.com;"
+  );
+  next();
+});
 
 // Body parser middleware
 app.use(express.json({ limit: '10mb' }));
